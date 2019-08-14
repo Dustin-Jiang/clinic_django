@@ -9,9 +9,12 @@ stages:
   - release
 
 before_script:
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
   - docker info
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  - apk
+  - apk add yarn
+  - cd clinic_admin && yarn && yarn run build && cd ..
 
 build-image:
   stage: build
