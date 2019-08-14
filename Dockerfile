@@ -3,6 +3,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 
+ENV DJANGO_PRODUCTION=1
+
 # Use sed because of potential file owner issue
 RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
     sed -i 's|security.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' /etc/apt/sources.list && \
@@ -15,7 +17,7 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.li
     rm -rf /var/lib/apt/lists/* && \
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
     python manage.py collectstatic --noinput
-ENV DJANGO_PRODUCTION=1
+
 COPY deploy/nginx-app.conf /etc/nginx/sites-available/default
 COPY deploy/supervisor-app.conf /etc/supervisor/conf.d/
 EXPOSE 80
