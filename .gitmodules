@@ -1,0 +1,3 @@
+[submodule "clinic_admin"]
+	path = clinic_admin
+	url = git@git.bitnp.net:BITNP/clinic/clinic_admin.git

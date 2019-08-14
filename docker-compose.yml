@@ -1,0 +1,13 @@
+version: "2"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: clinic
+  web:
+    build: .
+    restart: always
+    ports:
+      - 8888:80

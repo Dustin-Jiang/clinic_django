@@ -1,0 +1,6 @@
+django
+django_cas_ng
+django-cors-headers
+djangorestframework
+uwsgi
+psycopg2
