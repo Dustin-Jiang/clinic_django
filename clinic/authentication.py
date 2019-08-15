@@ -11,7 +11,7 @@ class ApikeyAuthentication(authentication.BaseAuthentication):
         username = request.query_params.get('username')
         if not username:
             return None
-
+            
         try:
             user = ClinicUser.objects.get(username=username)
         except ClinicUser.DoesNotExist:

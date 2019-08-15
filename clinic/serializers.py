@@ -19,7 +19,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
-    user = serializers.RelatedField(read_only=True, source="username")
+    user = serializers.SlugRelatedField(queryset=ClinicUser.objects.all(), slug_field="username")
 
     class Meta:
         model = Record

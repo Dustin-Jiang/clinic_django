@@ -14,5 +14,5 @@ urlpatterns = [
     path('manage/', manage, name="manage_index"),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/user/', ClinicUserView.as_view()),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
 ]

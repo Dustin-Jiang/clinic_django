@@ -37,18 +37,19 @@ class Record(models.Model):
                    '登记待受理', '正在处理', '已解决问题', '建议返厂', '扔给明天']
     STATUS = [(status, commnet) for status, commnet in enumerate(status_list)]
     user = models.ForeignKey(
-        ClinicUser, on_delete=models.CASCADE, related_name='顾客')
+        ClinicUser, on_delete=models.CASCADE, related_name='record', verbose_name="顾客",blank=True,null=True)
     worker = models.ForeignKey(
-        ClinicUser, on_delete=models.CASCADE, blank=True, null=True, related_name='维修人员')
+        ClinicUser, on_delete=models.CASCADE, blank=True, null=True, related_name='worker', verbose_name="维修人员")
     realname = models.CharField('姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
-    status = models.PositiveSmallIntegerField('状态', choices=STATUS)
+    status = models.PositiveSmallIntegerField('状态', default=1, choices=STATUS)
     is_appointment = models.BooleanField('是否预约', blank=True, null=True)
-    campus = models.CharField('校区', max_length=50, choices=CAMPUS)
-    appointment_time = models.DateField('预约日期', blank=True, null=True)
+    campus = models.CharField(
+        '校区', default="LX", max_length=50, choices=CAMPUS)
+    appointment_time = models.DateField('预约日期')
     arrive_time = models.DateTimeField('到达时间', blank=True, null=True)
     description = models.CharField(
-        '问题自述', max_length=300, blank=True, null=True)
+        '问题自述', max_length=300)
     worker_description = models.CharField(
         '问题描述', max_length=300, blank=True, null=True)
     deal_time = models.DateTimeField('完成时间', blank=True, null=True)
