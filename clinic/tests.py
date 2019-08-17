@@ -1,10 +1,3 @@
-'''
-@Date: 2019-08-12 20:46:44
-@LastEditTime: 2019-08-12 20:46:44
-@Description: file content
-@Author: Feng Kaiyu
-@LastEditors: Feng Kaiyu
-'''
 from django.test import TestCase
 from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase

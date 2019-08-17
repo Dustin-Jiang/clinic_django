@@ -166,6 +166,9 @@ AUTHENTICATION_BACKENDS = (
 )
 
 CAS_SERVER_URL = "https://login.bitnp.net/cas/"
+if DEBUG:
+    CAS_SERVER_URL = 'https://login.bit.edu.cn/devcas/'
+
 CAS_LOGIN_MSG = None
 CAS_LOGGED_MSG = None
 

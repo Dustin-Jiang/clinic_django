@@ -9,6 +9,7 @@ CAMPUS = (
 
 
 class ClinicUser(AbstractUser):
+    """clinic user."""
     realname = models.CharField('姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
     campus = models.CharField('校区', max_length=5, choices=CAMPUS, default="LX")
@@ -31,13 +32,14 @@ class ClinicUser(AbstractUser):
 
 
 class Record(models.Model):
+    """record."""
     class Meta:
         ordering = ['-id']
     status_list = ['上单未解决', '预约待确认', '预约已确认', '预约已驳回',
                    '登记待受理', '正在处理', '已解决问题', '建议返厂', '扔给明天']
     STATUS = [(status, commnet) for status, commnet in enumerate(status_list)]
     user = models.ForeignKey(
-        ClinicUser, on_delete=models.CASCADE, related_name='record', verbose_name="顾客",blank=True,null=True)
+        ClinicUser, on_delete=models.CASCADE, related_name='record', verbose_name="顾客", blank=True, null=True)
     worker = models.ForeignKey(
         ClinicUser, on_delete=models.CASCADE, blank=True, null=True, related_name='worker', verbose_name="维修人员")
     realname = models.CharField('姓名', max_length=50, blank=True, null=True)
@@ -72,3 +74,12 @@ class Record(models.Model):
         else:
             return "{name}-{status}-{arrive_time}".format(
                 name=self.user.realname, status=self.status_list[self.status], arrive_time=time)
+
+
+class Date(models.Model):
+    """business hour."""
+    name = models.CharField('名称', default="正常服务", max_length=30)
+    start = models.DateField(verbose_name="开始日期", unique=True)
+    capacity = models.PositiveIntegerField(verbose_name="可服务人数")
+    count = models.PositiveIntegerField(verbose_name="已使用容量", default=0)
+    finish = models.PositiveIntegerField(verbose_name="已完成数量", default=0)

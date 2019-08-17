@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ClinicUser, Record
+from .models import ClinicUser, Record, Date
 
 
 class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,10 +19,18 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
-    user = serializers.SlugRelatedField(queryset=ClinicUser.objects.all(), slug_field="username")
+    user = serializers.SlugRelatedField(
+        queryset=ClinicUser.objects.all(), slug_field="username")
 
     class Meta:
         model = Record
         fields = ('url', 'user', 'status', 'realname', 'phone_num', 'campus',
                   'appointment_time', 'description', 'worker_description',
                   'model', 'reject_reason')
+
+
+class DateSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Date
+        fields = '__all__'
+        read_only_fields = ('count', 'finish')

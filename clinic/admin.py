@@ -1,6 +1,6 @@
 from django.contrib import admin
 # from django.contrib.auth.admin import UserAdmin
-from .models import ClinicUser, Record
+from .models import ClinicUser, Record, Date
 
 # Register your models here.
 @admin.register(Record)
@@ -24,3 +24,5 @@ class ClinicUserAdmin(admin.ModelAdmin):
                         'work_sat', 'work_sun'))
         })
     )
+
+admin.register(Date)
