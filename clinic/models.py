@@ -31,6 +31,10 @@ class ClinicUser(AbstractUser):
         return "{}-{}".format(self.username, self.realname)
 
 
+WORKING_STATUS = [0, 1, 2, 4, 5]
+FINISHED_STATUS = [3, 6, 7, 8]
+
+
 class Record(models.Model):
     """record."""
     class Meta:

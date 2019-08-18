@@ -27,6 +27,7 @@ class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'user', 'status', 'realname', 'phone_num', 'campus',
                   'appointment_time', 'description', 'worker_description',
                   'model', 'reject_reason')
+        read_only_fields = ('status', 'worker_description', 'reject_reason')
 
 
 class DateSerializer(serializers.HyperlinkedModelSerializer):

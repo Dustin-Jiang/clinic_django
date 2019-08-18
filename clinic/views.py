@@ -1,19 +1,27 @@
-from datetime import datetime, date
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.authentication import BasicAuthentication
-from rest_framework import viewsets, status
-from .permissions import RecordPermission, ClinicUserPermission, ApikeyPermission
-from .decorators import login_require, worker_require, with_apikey
-from .models import Record, ClinicUser, Date
-from .serializers import ClinicUserSerializer, RecordSerializer, RecordSerializerWechat, DateSerializer
-from rest_framework.exceptions import ValidationError
-from .authentication import ApikeyAuthentication
-from rest_framework.mixins import UpdateModelMixin, CreateModelMixin, DestroyModelMixin
+from datetime import date, datetime
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseRedirect, JsonResponse)
+from django.shortcuts import render
+from rest_framework import status, viewsets
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   UpdateModelMixin)
+from rest_framework.permissions import (AllowAny, IsAdminUser, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
+
+from .authentication import ApikeyAuthentication
+from .decorators import login_require, with_apikey, worker_require
+from .models import FINISHED_STATUS, WORKING_STATUS, ClinicUser, Date, Record
+from .permissions import (ApikeyPermission, ClinicUserPermission,
+                          RecordPermission)
+from .serializers import (ClinicUserSerializer, DateSerializer,
+                          RecordSerializer, RecordSerializerWechat)
+
 # Create your views here.
 
 
@@ -27,6 +35,15 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         return Record.objects.filter(user__username=username)
 
     def perform_create(self, serializer: RecordSerializer):
+
+        # 已有三个working中的工单，则不接新的
+        working_record_count: int = Record.objects().filter(
+            status__in=WORKING_STATUS).count()
+
+        if working_record_count >= 3:
+            raise ValidationError("已超出可申请工单数量")
+
+        # 不在营业时间内的工单不接
         try:
             d = Date.objects.get(
                 start=serializer.validated_data['appointment_time'])
@@ -128,11 +145,11 @@ class RecordViewSet(viewsets.ModelViewSet):
         return super().create(request)
 
     def perform_update(self, serializer: RecordSerializer):
-        if serializer.instance.status <= 5 and serializer.validated_data['status'] and serializer.validated_data['status'] > 5:
+        if serializer.instance.status in WORKING_STATUS and serializer.validated_data['status'] and serializer.validated_data['status'] in FINISHED_STATUS:
             d = Date.objects.get(start=serializer.instance.appointment_time)
             d.count -= 1
             d.finish += 1
-        if serializer.instance.status > 5 and serializer.validated_data['status'] and serializer.validated_data['status'] <= 5:
+        if serializer.instance.status in FINISHED_STATUS and serializer.validated_data['status'] and serializer.validated_data['status'] in WORKING_STATUS:
             d = Date.objects.get(start=serializer.instance.appointment_time)
             d.count += 1
             d.finish -= 1
