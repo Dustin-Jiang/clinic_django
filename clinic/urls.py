@@ -1,7 +1,7 @@
-from django.urls import path, include
-from .views import manage
-from .views import ClinicUserViewSet, RecordViewSet, RecordViewSetWechat, DateViewSet
+from django.urls import include, path
 from rest_framework import routers
+from .views import (AnnouncementViewSet, ClinicUserViewSet, DateViewSet,
+                    RecordViewSet, RecordViewSetWechat, manage)
 from .views4serializer import ClinicUserView
 
 router = routers.DefaultRouter()
@@ -9,7 +9,7 @@ router.register('users', ClinicUserViewSet, 'clinicuser')
 router.register('records', RecordViewSet, 'record')
 router.register('wechat', RecordViewSetWechat, 'wechat')
 router.register('date', DateViewSet, 'date')
-
+router.register('announcement', AnnouncementViewSet, 'announcement')
 
 urlpatterns = [
     path('manage/', manage, name="manage_index"),

@@ -1,3 +1,5 @@
+from .models import Announcement
+from .serializers import AnnouncementSerializer
 from datetime import date, datetime
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -185,3 +187,15 @@ class DateViewSet(viewsets.ModelViewSet):
             raise ValidationError(detail={'msg':
                                           '已经有工单存在，无法删除'})
         DestroyModelMixin.perform_destroy(self, instance)
+
+
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    queryset = Announcement.objects.filter(expireDate__gte=date.today())
+    serializer_class = AnnouncementSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
+    pagination_class = None
+
+    @action(detail=False, methods=["GET"])
+    def toc(self, request, pk=None):
+        """返回TOC"""
+        return Response(Announcement.objects.filter(type='TOC').last())

@@ -87,3 +87,23 @@ class Date(models.Model):
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
     count = models.PositiveIntegerField(verbose_name="已使用容量", default=0)
     finish = models.PositiveIntegerField(verbose_name="已完成数量", default=0)
+
+
+class Announcement(models.Model):
+    """accouncement related things."""
+
+    TAG_CHOICE = (
+        ('AN', '普通公告'),
+        ('TOC', '免责声明')
+    )
+
+    title = models.CharField('标题', max_length=30)
+    content = models.TextField("内容")
+    tag = models.CharField("类型", max_length=5)
+    createdTime = models.DateTimeField(
+        "创建时间", auto_now=False, auto_now_add=True)
+    lastEditedTime = models.DateTimeField(
+        "最后编辑时间", auto_now=True, auto_now_add=False)
+    expireDate = models.DateField(
+        '失效时间'
+    )

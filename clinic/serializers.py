@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ClinicUser, Record, Date
+from .models import Announcement, ClinicUser, Date, Record
 
 
 class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,6 +13,7 @@ class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RecordSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     class Meta:
         model = Record
         fields = '__all__'
@@ -35,3 +36,9 @@ class DateSerializer(serializers.HyperlinkedModelSerializer):
         model = Date
         fields = '__all__'
         read_only_fields = ('count', 'finish')
+
+class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = '__all__'
+        read_only_fields = ('createdTime',)
