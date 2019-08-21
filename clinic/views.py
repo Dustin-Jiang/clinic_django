@@ -39,7 +39,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
     def perform_create(self, serializer: RecordSerializer):
 
         # 已有三个working中的工单，则不接新的
-        working_record_count: int = Record.objects().filter(
+        working_record_count: int = Record.objects.filter(
             status__in=WORKING_STATUS).count()
 
         if working_record_count >= 3:
@@ -198,4 +198,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["GET"])
     def toc(self, request, pk=None):
         """返回TOC"""
-        return Response(Announcement.objects.filter(type='TOC').last())
+        query = Announcement.objects.filter(tag='TOC').last()
+        if query:
+            return Response(query.content)
+        else:
+            return Response("暂无公告")
