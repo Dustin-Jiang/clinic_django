@@ -1,0 +1,23 @@
+version: "2"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: clinic
+    networks:
+      - default
+  web:
+    image: docker.bitnp.net/bitnp/clinic/clinic_django:master
+    restart: always
+    ports:
+      - 8888:80
+    environment:
+      VIRTUAL_HOST: clinic.bitnp.net
+    networks:
+      - default
+      - PROXY? # change before deploy      
+networks:
+  PROXY?:
+    external: true
