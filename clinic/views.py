@@ -199,7 +199,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     def toc(self, request, pk=None):
         """返回TOC"""
         query = Announcement.objects.filter(tag='TOC').last()
+        print(query)
         if query:
-            return Response(query.content)
+            return JsonResponse({'content':query.content})
         else:
-            return Response("暂无公告")
+            return JsonResponse({'content':"暂无公告"})
