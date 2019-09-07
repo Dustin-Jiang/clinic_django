@@ -6,10 +6,15 @@ services:
     environment:
       POSTGRES_PASSWORD: example
       POSTGRES_DB: clinic
+    network_mode: bridge
   web:
     image: docker.bitnp.net/bitnp/clinic/clinic_django:local-build
     restart: always
     environment:
+      apikey: oh-my-tlb # you must change that before deploy
       VIRTUAL_HOST: clinic.bitnp.net
       VIRTUAL_PORT: 80
     network_mode: bridge
+    links:
+      - "db:db"
+
