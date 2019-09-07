@@ -4,6 +4,11 @@ variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   RELEASE_TAG: $CI_REGISTRY_IMAGE:latest
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - clinic_admin/node_modules
+
 stages:
   - build
   - release
