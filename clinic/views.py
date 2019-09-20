@@ -39,9 +39,12 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
     def perform_create(self, serializer: RecordSerializer):
 
         # 已有三个working中的工单，则不接新的
-        working_record_count: int = Record.objects.filter(
-            status__in=WORKING_STATUS).count()
+        print("[working_record_count]", self.request.query_params['username'])
 
+        working_record_count: int = Record.objects.filter(
+            status__in=WORKING_STATUS, user=self.request.user).count()
+
+        print("[working_record_count]", working_record_count)
         if working_record_count >= 3:
             raise ValidationError("已超出可申请工单数量")
 
@@ -201,6 +204,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         query = Announcement.objects.filter(tag='TOC').last()
         print(query)
         if query:
-            return JsonResponse({'content':query.content})
+            return JsonResponse({'content': query.content})
         else:
-            return JsonResponse({'content':"暂无公告"})
+            return JsonResponse({'content': "暂无公告"})
