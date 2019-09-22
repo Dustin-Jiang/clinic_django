@@ -7,7 +7,7 @@ class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
         model = ClinicUser
         fields = ('url', 'username', 'id', 'is_staff',
                   'school', 'campus', 'realname', 'phone_num',
-                  'work_mon', 'work_tue', 'work_wedn', 'work_thu',
+                  'work_mon', 'work_tue', 'work_wedn', 'work_thu', 'work_fri',
                   'work_sat', 'work_sun')
         read_only_fields = ('is_staff', )
 

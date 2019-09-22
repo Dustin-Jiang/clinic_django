@@ -24,7 +24,7 @@ def worker_require(func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('cas_ng_login'))
-        elif not request.user.is_staff and request.user.is_superuser:
+        elif not (request.user.is_staff and request.user.is_superuser):
             return HttpResponseForbidden()
         else:
             return func(request, *args, **kwargs)
