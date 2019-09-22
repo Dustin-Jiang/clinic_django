@@ -1,6 +1,6 @@
 from django.contrib import admin
 # from django.contrib.auth.admin import UserAdmin
-from .models import ClinicUser, Record, Date
+from .models import ClinicUser, Record, Date, Announcement
 
 # Register your models here.
 @admin.register(Record)
@@ -20,9 +20,13 @@ class ClinicUserAdmin(admin.ModelAdmin):
         }),
         ('工作人员信息', {
             'fields': ('is_staff', 'is_superuser',
-                       ('work_mon', 'work_tue', 'work_wedn', 'work_thu',
+                       ('work_mon', 'work_tue', 'work_wedn', 'work_thu', 'work_fri'
                         'work_sat', 'work_sun'))
         })
     )
 
 admin.register(Date)
+
+@admin.register(Announcement)
+class AnnouncementAdmin:
+    readonly_fields = ('createdTime', 'lastEditedTime')
