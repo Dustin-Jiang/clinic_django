@@ -100,7 +100,7 @@ class Announcement(models.Model):
 
     title = models.CharField('标题', max_length=30)
     content = models.TextField("内容")
-    tag = models.CharField("类型", max_length=5)
+    tag = models.CharField("类型", max_length=5, choices=TAG_CHOICE)
     createdTime = models.DateTimeField(
         "创建时间", auto_now=False, auto_now_add=True)
     lastEditedTime = models.DateTimeField(
