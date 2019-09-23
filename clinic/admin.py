@@ -30,3 +30,4 @@ admin.register(Date)
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     readonly_fields = ('createdTime', 'lastEditedTime')
+    list_display = ('title', 'tag', 'content', 'is_available')

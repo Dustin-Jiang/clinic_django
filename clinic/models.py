@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import datetime
 
 # Create your models here.
 CAMPUS = (
@@ -107,3 +108,10 @@ class Announcement(models.Model):
     expireDate = models.DateField(
         '失效时间'
     )
+
+    def is_available(self):
+        return datetime.datetime.now() < self.expireDate
+    is_available.short_description = '是否过期'
+
+    def __str__(self):
+        return self.title
