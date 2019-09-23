@@ -171,6 +171,7 @@ if DEBUG:
 
 CAS_LOGIN_MSG = None
 CAS_LOGGED_MSG = None
+CAS_REDIRECT_URL = '/manage/'
 
 AUTH_USER_MODEL = 'clinic.ClinicUser'
 REST_FRAMEWORK = {
