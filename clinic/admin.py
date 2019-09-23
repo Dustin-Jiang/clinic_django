@@ -20,7 +20,7 @@ class ClinicUserAdmin(admin.ModelAdmin):
         }),
         ('工作人员信息', {
             'fields': ('is_staff', 'is_superuser',
-                       ('work_mon', 'work_tue', 'work_wedn', 'work_thu', 'work_fri'
+                       ('work_mon', 'work_tue', 'work_wedn', 'work_thu', 'work_fri', 
                         'work_sat', 'work_sun'))
         })
     )
