@@ -28,5 +28,5 @@ class ClinicUserAdmin(admin.ModelAdmin):
 admin.register(Date)
 
 @admin.register(Announcement)
-class AnnouncementAdmin:
+class AnnouncementAdmin(admin.ModelAdmin):
     readonly_fields = ('createdTime', 'lastEditedTime')
