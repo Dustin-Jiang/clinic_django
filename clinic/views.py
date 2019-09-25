@@ -162,7 +162,7 @@ class RecordViewSet(viewsets.ModelViewSet):
 
 
 class DateViewSet(viewsets.ModelViewSet):
-    queryset = Date.objects.filter(start__gte=date.today())
+    queryset = Date.objects.filter(date__gte=date.today())
     serializer_class = DateSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
