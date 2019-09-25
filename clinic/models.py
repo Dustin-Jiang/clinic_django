@@ -86,8 +86,6 @@ class Date(models.Model):
     name = models.CharField('名称', default="正常服务", max_length=30)
     start = models.DateField(verbose_name="开始日期", unique=True)
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
-    count = models.PositiveIntegerField(verbose_name="已使用容量", default=0)
-    finish = models.PositiveIntegerField(verbose_name="已完成数量", default=0)
 
 
 class Announcement(models.Model):
