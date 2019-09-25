@@ -115,3 +115,14 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Campus(models.Model):
+    """campuses of bit""" 
+
+    name = models.CharField('校区名称', max_length=10)
+    address = models.CharField('诊所地址', max_length=100)
+
+    def __str__(self):
+        return self.name
+
