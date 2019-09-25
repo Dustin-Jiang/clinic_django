@@ -83,8 +83,8 @@ class Record(models.Model):
 
 class Date(models.Model):
     """business hour."""
-    name = models.CharField('名称', default="正常服务", max_length=30)
-    start = models.DateField(verbose_name="开始日期", unique=True)
+    title = models.CharField('名称', default="正常服务", max_length=30)
+    date = models.DateField(verbose_name="开始日期", unique=True)
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
     campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, blank=True, null=True)
 
