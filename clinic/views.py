@@ -51,28 +51,25 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         # 不在营业时间内的工单不接
         try:
             d = Date.objects.get(
-                start=serializer.validated_data['appointment_time'])
+                date=serializer.validated_data['appointment_time'])
         except ObjectDoesNotExist:
             raise ValidationError(detail={
                 'appointment_time': '该日期诊所停止营业'
             })
-        if d.capacity <= d.count:
+        count = Record.objects.filter(appointment_time=serializer.validated_data['appointment_time']).count()
+        if d.capacity <= count:
             raise ValidationError(detail={'detail': '该日期已无剩余容量'})
-        d.count += 1
-        d.save()
         CreateModelMixin.perform_create(self, serializer)
 
     def perform_destroy(self, instance: Record):
         try:
             d = Date.objects.get(
-                start=instance.appointment_time
+                date=instance.appointment_time
             )
         except ObjectDoesNotExist:
             raise ValidationError(detail={
                 'appointment_time': '该日期诊所停止营业'
             })
-        d.count -= 1
-        d.save()
         DestroyModelMixin.perform_destroy(self, instance)
 
 
@@ -149,17 +146,6 @@ class RecordViewSet(viewsets.ModelViewSet):
                     return Response({'detail': "too many request"}, status=status.HTTP_400_BAD_REQUEST)
         return super().create(request)
 
-    def perform_update(self, serializer: RecordSerializer):
-        if serializer.instance.status in WORKING_STATUS and serializer.validated_data['status'] and serializer.validated_data['status'] in FINISHED_STATUS:
-            d = Date.objects.get(start=serializer.instance.appointment_time)
-            d.count -= 1
-            d.finish += 1
-        if serializer.instance.status in FINISHED_STATUS and serializer.validated_data['status'] and serializer.validated_data['status'] in WORKING_STATUS:
-            d = Date.objects.get(start=serializer.instance.appointment_time)
-            d.count += 1
-            d.finish -= 1
-        UpdateModelMixin.perform_update(self, serializer)
-
 
 class DateViewSet(viewsets.ModelViewSet):
     queryset = Date.objects.filter(date__gte=date.today())
@@ -168,17 +154,17 @@ class DateViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
     def perform_create(self, serializer: DateSerializer):
-        start = serializer.validated_data['start']
+        start = serializer.validated_data['date']
         if start < date.today():
-            raise ValidationError(detail={'start': '不能早于今天'})
+            raise ValidationError(detail={'date': '不能早于今天'})
         super().perform_create(serializer)
 
     def perform_update(self, serializer: DateSerializer):
 
-        start = serializer.validated_data['start']
-        old_start = serializer.instance.start
+        start = serializer.validated_data['date']
+        old_start = serializer.instance.date
 
-        if serializer.instance.count > 0 and start != old_start:
+        if Record.objects.filter(appointment_time=old_start).count() > 0 and start != old_start:
             raise ValidationError("已经有工单存在，无法修改")
 
         if start < date.today():
@@ -186,7 +172,7 @@ class DateViewSet(viewsets.ModelViewSet):
         UpdateModelMixin.perform_update(self, serializer)
 
     def perform_destroy(self, instance: Date):
-        if instance.count > 0:
+        if Record.objects.filter(appointment_time=instance.date).count() > 0:
             raise ValidationError(detail={'msg':
                                           '已经有工单存在，无法删除'})
         DestroyModelMixin.perform_destroy(self, instance)

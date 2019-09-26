@@ -87,7 +87,6 @@ class Date(models.Model):
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
     campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, blank=True, null=True)
 
-
 class Announcement(models.Model):
     """accouncement related things."""
 

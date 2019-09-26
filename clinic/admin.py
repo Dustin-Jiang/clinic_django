@@ -1,6 +1,6 @@
 from django.contrib import admin
 # from django.contrib.auth.admin import UserAdmin
-from .models import ClinicUser, Record, Date, Announcement
+from .models import ClinicUser, Record, Date, Announcement, Campus
 
 # Register your models here.
 @admin.register(Record)
@@ -27,3 +27,5 @@ admin.register(Date)
 class AnnouncementAdmin(admin.ModelAdmin):
     readonly_fields = ('createdTime', 'lastEditedTime')
     list_display = ('title', 'tag', 'content')
+
+admin.register(Campus)
