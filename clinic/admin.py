@@ -6,10 +6,6 @@ from .models import ClinicUser, Record, Date, Announcement
 @admin.register(Record)
 class RecordAdmin(admin.ModelAdmin):
     list_display = ('user', 'worker', 'status', 'arrive_time')
-    fields = ('user', 'worker', 'realname', 'phone_num', 'status', 'is_appointment', 'arrive_time', 'description',
-              'worker_description', 'deal_time', 'model', 'method', 'reject_reason', 'password',
-              'is_taken')
-
 
 @admin.register(ClinicUser)
 class ClinicUserAdmin(admin.ModelAdmin):
