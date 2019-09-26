@@ -18,11 +18,11 @@ from rest_framework.response import Response
 
 from .authentication import ApikeyAuthentication
 from .decorators import login_require, with_apikey, worker_require
-from .models import FINISHED_STATUS, WORKING_STATUS, ClinicUser, Date, Record
+from .models import FINISHED_STATUS, WORKING_STATUS, ClinicUser, Date, Record, Campus
 from .permissions import (ApikeyPermission, ClinicUserPermission,
                           RecordPermission)
 from .serializers import (ClinicUserSerializer, DateSerializer,
-                          RecordSerializer, RecordSerializerWechat)
+                          RecordSerializer, RecordSerializerWechat, CampusSerializer)
 
 # Create your views here.
 
@@ -56,8 +56,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
             raise ValidationError(detail={
                 'appointment_time': '该日期诊所停止营业'
             })
-        count = Record.objects.filter(appointment_time=serializer.validated_data['appointment_time']).count()
-        if d.capacity <= count:
+        if d.capacity <= d.count():
             raise ValidationError(detail={'detail': '该日期已无剩余容量'})
         CreateModelMixin.perform_create(self, serializer)
 
@@ -164,7 +163,7 @@ class DateViewSet(viewsets.ModelViewSet):
         start = serializer.validated_data['date']
         old_start = serializer.instance.date
 
-        if Record.objects.filter(appointment_time=old_start).count() > 0 and start != old_start:
+        if serializer_class.instance.count() > 0 and start != old_start:
             raise ValidationError("已经有工单存在，无法修改")
 
         if start < date.today():
@@ -172,7 +171,7 @@ class DateViewSet(viewsets.ModelViewSet):
         UpdateModelMixin.perform_update(self, serializer)
 
     def perform_destroy(self, instance: Date):
-        if Record.objects.filter(appointment_time=instance.date).count() > 0:
+        if instance.count() > 0:
             raise ValidationError(detail={'msg':
                                           '已经有工单存在，无法删除'})
         DestroyModelMixin.perform_destroy(self, instance)
@@ -193,3 +192,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             return JsonResponse({'content': query.content})
         else:
             return JsonResponse({'content': "暂无公告"})
+
+class CampusViewSet(viewsets.ModelViewSet):
+    queryset = Campus.objects.all()
+    serializer_class = CampusSerializer

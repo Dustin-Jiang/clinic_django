@@ -21,11 +21,11 @@ class ClinicUserAdmin(admin.ModelAdmin):
         })
     )
 
-admin.register(Date)
+admin.site.register(Date)
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     readonly_fields = ('createdTime', 'lastEditedTime')
     list_display = ('title', 'tag', 'content')
 
-admin.register(Campus)
+admin.site.register(Campus)

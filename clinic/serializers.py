@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Announcement, ClinicUser, Date, Record
+from .models import Announcement, ClinicUser, Date, Record, Campus
 
 
 class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,6 +32,8 @@ class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
 
 
 class DateSerializer(serializers.HyperlinkedModelSerializer):
+    count = serializers.ReadOnlyField()
+    finish = serializers.ReadOnlyField()
     class Meta:
         model = Date
         fields = '__all__'
@@ -42,3 +44,8 @@ class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
         model = Announcement
         fields = '__all__'
         read_only_fields = ('createdTime',)
+
+class CampusSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Campus
+        fields = '__all__'

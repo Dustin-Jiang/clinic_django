@@ -87,6 +87,12 @@ class Date(models.Model):
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
     campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, blank=True, null=True)
 
+    def count(self):
+        return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
+
+    def finish(self):
+        return Record.objects.filter(appointment_time=self.date, status__in=FINISHED_STATUS, campus=self.campus).count()
+
 class Announcement(models.Model):
     """accouncement related things."""
 
