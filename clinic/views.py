@@ -38,14 +38,14 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def perform_create(self, serializer: RecordSerializer):
 
-        # 已有三个working中的工单，则不接新的
+        # 已有1个working中的工单，则不接新的
         print("[working_record_count]", self.request.query_params['username'])
 
         working_record_count: int = Record.objects.filter(
             status__in=WORKING_STATUS, user=self.request.user).count()
 
         print("[working_record_count]", working_record_count)
-        if working_record_count >= 3:
+        if working_record_count >= 1:
             raise ValidationError("已超出可申请工单数量")
 
         # 不在营业时间内的工单不接
