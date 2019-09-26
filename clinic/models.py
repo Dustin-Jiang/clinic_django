@@ -13,7 +13,7 @@ class ClinicUser(AbstractUser):
     """clinic user."""
     realname = models.CharField('姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
-    campus = models.CharField('校区', max_length=5, choices=CAMPUS, default="LX")
+    campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, null=True, blank=True)
     school = models.CharField('学院', max_length=20, blank=True, null=True)
 
     work_mon = models.BooleanField('周一值班', default=False)
@@ -51,8 +51,7 @@ class Record(models.Model):
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
     status = models.PositiveSmallIntegerField('状态', default=1, choices=STATUS)
     is_appointment = models.BooleanField('是否预约', blank=True, null=True)
-    campus = models.CharField(
-        '校区', default="LX", max_length=50, choices=CAMPUS)
+    campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, null=True, blank=True)
     appointment_time = models.DateField('预约日期')
     arrive_time = models.DateTimeField('到达时间', blank=True, null=True)
     description = models.CharField(
