@@ -17,7 +17,8 @@ class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
 
 class RecordSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-
+    campus = serializers.SlugRelatedField(
+        slug_field="name", queryset=Campus.objects.all())
     class Meta:
         model = Record
         fields = '__all__'
@@ -26,6 +27,8 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
     user = serializers.SlugRelatedField(
         queryset=ClinicUser.objects.all(), slug_field="username")
+    campus = serializers.SlugRelatedField(
+        slug_field="name", queryset=Campus.objects.all())
 
     class Meta:
         model = Record

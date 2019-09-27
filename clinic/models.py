@@ -11,7 +11,7 @@ CAMPUS = (
 
 class ClinicUser(AbstractUser):
     """clinic user."""
-    realname = models.CharField('姓名', max_length=50, blank=True, null=True)
+    realname = models.CharField('真实姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
     campus = models.ForeignKey(
         'Campus', on_delete=models.SET_NULL, null=True, blank=True)
@@ -48,12 +48,12 @@ class Record(models.Model):
         ClinicUser, on_delete=models.CASCADE, related_name='record', verbose_name="顾客", blank=True, null=True)
     worker = models.ForeignKey(
         ClinicUser, on_delete=models.CASCADE, blank=True, null=True, related_name='worker', verbose_name="维修人员")
-    realname = models.CharField('姓名', max_length=50, blank=True, null=True)
+    realname = models.CharField('真实姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
     status = models.PositiveSmallIntegerField('状态', default=1, choices=STATUS)
     is_appointment = models.BooleanField('是否预约', blank=True, null=True)
     campus = models.ForeignKey(
-        'Campus', on_delete=models.SET_NULL, null=True, blank=True)
+        'Campus', verbose_name="校区", related_name="record", on_delete=models.CASCADE)
     appointment_time = models.DateField('预约日期')
     arrive_time = models.DateTimeField('到达时间', blank=True, null=True)
     description = models.CharField(
