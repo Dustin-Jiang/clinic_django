@@ -100,7 +100,7 @@ class ClinicUserViewSet(viewsets.ModelViewSet):
                     queryset = queryset.filter(is_staff=is_staff).order_by(
                         '-' + weekday_list[weekday])
                 if campus is not None:
-                    queryset = queryset.filter(campus=campus)
+                    queryset = queryset.filter(campus__name=campus)
         return queryset
 
     @action(detail=False, permission_classes=[AllowAny], methods=["GET"])
@@ -130,7 +130,8 @@ class RecordViewSet(viewsets.ModelViewSet):
         if not self.request.user.is_staff:
             queryset = queryset.filter(user=self.request.user)
         elif campus:
-            queryset = queryset.filter(campus=campus)
+            # 因为传入的是name字段
+            queryset = queryset.filter(campus__name=campus)
         return queryset
 
     def create(self, request):
