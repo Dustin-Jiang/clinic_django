@@ -85,10 +85,12 @@ class Record(models.Model):
 class Date(models.Model):
     """business hour."""
     title = models.CharField('名称', default="正常服务", max_length=30)
-    date = models.DateField(verbose_name="开始日期", unique=True)
+    date = models.DateField(verbose_name="开始日期")
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
     campus = models.ForeignKey(
         'Campus', on_delete=models.SET_NULL, blank=True, null=True)
+    startTime = models.TimeField(verbose_name='服务开始时间')
+    endTime = models.TimeField(verbose_name='服务结束时间')
 
     def count(self):
         return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
