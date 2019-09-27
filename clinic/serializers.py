@@ -25,6 +25,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='wechat-detail')
     user = serializers.SlugRelatedField(
         queryset=ClinicUser.objects.all(), slug_field="username")
     campus = serializers.SlugRelatedField(
