@@ -3,7 +3,9 @@ from .models import Announcement, ClinicUser, Date, Record, Campus
 
 
 class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
-    campus = serializers.SlugRelatedField(slug_field='name',queryset = Campus.objects.all())
+    campus = serializers.SlugRelatedField(
+        slug_field='name', queryset=Campus.objects.all())
+
     class Meta:
         model = ClinicUser
         fields = ('url', 'username', 'id', 'is_staff',
@@ -15,6 +17,7 @@ class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
 
 class RecordSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+
     class Meta:
         model = Record
         fields = '__all__'
@@ -35,16 +38,21 @@ class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
 class DateSerializer(serializers.HyperlinkedModelSerializer):
     count = serializers.ReadOnlyField()
     finish = serializers.ReadOnlyField()
+    campus = serializers.SlugRelatedField(
+        slug_field="name", queryset=Campus.objects.all())
+
     class Meta:
         model = Date
         fields = '__all__'
         read_only_fields = ('count', 'finish')
+
 
 class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Announcement
         fields = '__all__'
         read_only_fields = ('createdTime',)
+
 
 class CampusSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
