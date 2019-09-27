@@ -13,7 +13,8 @@ class ClinicUser(AbstractUser):
     """clinic user."""
     realname = models.CharField('姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
-    campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, null=True, blank=True)
+    campus = models.ForeignKey(
+        'Campus', on_delete=models.SET_NULL, null=True, blank=True)
     school = models.CharField('学院', max_length=20, blank=True, null=True)
 
     work_mon = models.BooleanField('周一值班', default=False)
@@ -51,7 +52,8 @@ class Record(models.Model):
     phone_num = models.CharField('电话号码', max_length=50, blank=True, null=True)
     status = models.PositiveSmallIntegerField('状态', default=1, choices=STATUS)
     is_appointment = models.BooleanField('是否预约', blank=True, null=True)
-    campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, null=True, blank=True)
+    campus = models.ForeignKey(
+        'Campus', on_delete=models.SET_NULL, null=True, blank=True)
     appointment_time = models.DateField('预约日期')
     arrive_time = models.DateTimeField('到达时间', blank=True, null=True)
     description = models.CharField(
@@ -85,13 +87,15 @@ class Date(models.Model):
     title = models.CharField('名称', default="正常服务", max_length=30)
     date = models.DateField(verbose_name="开始日期", unique=True)
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
-    campus = models.ForeignKey('Campus', on_delete=models.SET_NULL, blank=True, null=True)
+    campus = models.ForeignKey(
+        'Campus', on_delete=models.SET_NULL, blank=True, null=True)
 
     def count(self):
         return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
 
     def finish(self):
         return Record.objects.filter(appointment_time=self.date, status__in=FINISHED_STATUS, campus=self.campus).count()
+
 
 class Announcement(models.Model):
     """accouncement related things."""
@@ -121,11 +125,10 @@ class Announcement(models.Model):
 
 
 class Campus(models.Model):
-    """campuses of bit""" 
+    """campuses of bit"""
 
-    name = models.CharField('校区名称', max_length=10)
+    name = models.CharField('校区名称', unique=True, max_length=10)
     address = models.CharField('诊所地址', max_length=100)
 
     def __str__(self):
         return self.name
-

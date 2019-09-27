@@ -3,6 +3,7 @@ from .models import Announcement, ClinicUser, Date, Record, Campus
 
 
 class ClinicUserSerializer(serializers.HyperlinkedModelSerializer):
+    campus = serializers.SlugRelatedField(slug_field='name',queryset = Campus.objects.all())
     class Meta:
         model = ClinicUser
         fields = ('url', 'username', 'id', 'is_staff',
@@ -48,4 +49,4 @@ class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
 class CampusSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Campus
-        fields = '__all__'
+        fields = ('name',)

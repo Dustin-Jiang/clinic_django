@@ -163,7 +163,7 @@ class DateViewSet(viewsets.ModelViewSet):
         start = serializer.validated_data['date']
         old_start = serializer.instance.date
 
-        if serializer_class.instance.count() > 0 and start != old_start:
+        if serializer.instance.count() > 0 and start != old_start:
             raise ValidationError("已经有工单存在，无法修改")
 
         if start < date.today():
@@ -196,3 +196,4 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 class CampusViewSet(viewsets.ModelViewSet):
     queryset = Campus.objects.all()
     serializer_class = CampusSerializer
+    pagination_class = None
