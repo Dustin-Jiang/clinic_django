@@ -197,4 +197,5 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 class CampusViewSet(viewsets.ModelViewSet):
     queryset = Campus.objects.all()
     serializer_class = CampusSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
