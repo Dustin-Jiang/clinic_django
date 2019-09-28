@@ -23,6 +23,7 @@ from .permissions import (ApikeyPermission, ClinicUserPermission,
                           RecordPermission)
 from .serializers import (ClinicUserSerializer, DateSerializer,
                           RecordSerializer, RecordSerializerWechat, CampusSerializer)
+from django.utils import timezone
 
 # Create your views here.
 
@@ -34,7 +35,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def get_queryset(self):
         username = self.request.query_params['username']
-        return Record.objects.filter(user__username=username)
+        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS, arrive_time__lte=timezone.now())
 
     def perform_create(self, serializer: RecordSerializer):
 
