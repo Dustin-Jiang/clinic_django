@@ -35,7 +35,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def get_queryset(self):
         username = self.request.query_params['username']
-        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS, appointment_time__lte=timezone.now())
+        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS, appointment_time__lt=timezone.now())
 
     def perform_create(self, serializer: RecordSerializer):
 
