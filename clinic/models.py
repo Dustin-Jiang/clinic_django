@@ -92,6 +92,9 @@ class Date(models.Model):
     startTime = models.TimeField(verbose_name='服务开始时间')
     endTime = models.TimeField(verbose_name='服务结束时间')
 
+    def __str__(self):
+        return '{} {}人'.format(self.date, self.capacity)
+
     def count(self):
         return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
 
