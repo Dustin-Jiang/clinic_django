@@ -35,7 +35,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def get_queryset(self):
         username = self.request.query_params['username']
-        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS, arrive_time__lte=timezone.now())
+        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS, appointment_time__lte=timezone.now())
 
     def perform_create(self, serializer: RecordSerializer):
 
@@ -43,7 +43,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         print("[working_record_count]", self.request.query_params['username'])
 
         working_record_count: int = Record.objects.filter(
-            status__in=WORKING_STATUS, user=self.request.user, arrive_time__lte=timezone.now()).count()
+            status__in=WORKING_STATUS, user=self.request.user, appointment_time__lte=timezone.now()).count()
 
         print("[working_record_count]", working_record_count)
         if working_record_count >= 1:
