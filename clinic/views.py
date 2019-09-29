@@ -59,6 +59,8 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
             })
         if d.capacity <= d.count():
             raise ValidationError(detail={'detail': '该日期已无剩余容量'})
+        if serializer.validated_data['appointment_time'] < timezone.now().date():
+            raise ValidationError(detail={'detail': '你要穿越回去？'})
         CreateModelMixin.perform_create(self, serializer)
 
     def perform_destroy(self, instance: Record):
