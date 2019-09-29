@@ -43,7 +43,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         print("[working_record_count]", self.request.query_params['username'])
 
         working_record_count: int = Record.objects.filter(
-            status__in=WORKING_STATUS, user=self.request.user).count()
+            status__in=WORKING_STATUS, user=self.request.user, arrive_time__lte=timezone.now()).count()
 
         print("[working_record_count]", working_record_count)
         if working_record_count >= 1:
