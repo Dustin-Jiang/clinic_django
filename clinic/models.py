@@ -84,6 +84,8 @@ class Record(models.Model):
 
 class Date(models.Model):
     """business hour."""
+    class Meta:
+        ordering = ["-date"]
     title = models.CharField('名称', default="正常服务", max_length=30)
     date = models.DateField(verbose_name="开始日期")
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
