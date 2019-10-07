@@ -107,6 +107,9 @@ class Date(models.Model):
 class Announcement(models.Model):
     """accouncement related things."""
 
+    class Meta:
+        ordering = ['piority', '-createdTime']
+
     TAG_CHOICE = (
         ('AN', '普通公告'),
         ('TOC', '免责声明')
@@ -121,6 +124,9 @@ class Announcement(models.Model):
         "最后编辑时间", auto_now=True, auto_now_add=False)
     expireDate = models.DateField(
         '失效时间'
+    )
+    piority = models.PositiveIntegerField(
+        '显示优先级', default=1
     )
 
     def is_available(self):
