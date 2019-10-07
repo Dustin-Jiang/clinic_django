@@ -30,7 +30,7 @@ class ClinicUser(AbstractUser):
         return False
 
     def __str__(self):
-        return "{}-{}".format(self.username, self.realname)
+        return "{}-{}-{}".format(self.campus, self.username, self.realname)
 
 
 WORKING_STATUS = [0, 1, 2, 4, 5]
@@ -95,7 +95,7 @@ class Date(models.Model):
     endTime = models.TimeField(verbose_name='服务结束时间')
 
     def __str__(self):
-        return '{} {}人'.format(self.date, self.capacity)
+        return '{}-{}-{}人'.format(self.date, self.campus, self.capacity)
 
     def count(self):
         return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
