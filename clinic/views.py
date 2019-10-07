@@ -39,8 +39,19 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def perform_create(self, serializer: RecordSerializer):
 
+        # 不在营业时间内的工单不接
+        try:
+            d = Date.objects.get(
+                date=serializer.validated_data['appointment_time'],
+                campus__name=serializer.validated_data['campus']
+            )
+        except ObjectDoesNotExist:
+            raise ValidationError(detail={
+                'appointment_time': '该日期诊所停止营业'
+            })
+        if d.capacity <= d.count():
+            raise ValidationError(detail={'detail': '该日期已无剩余容量'})
         # 已有1个working中的工单，则不接新的
-        print("[working_record_count]", self.request.query_params['username'])
 
         working_record_count: int = Record.objects.filter(
             status__in=WORKING_STATUS, user=self.request.user, appointment_time__gte=timezone.now()).count()
@@ -49,16 +60,6 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         if working_record_count >= 1:
             raise ValidationError("已超出可申请工单数量")
 
-        # 不在营业时间内的工单不接
-        try:
-            d = Date.objects.get(
-                date=serializer.validated_data['appointment_time'])
-        except ObjectDoesNotExist:
-            raise ValidationError(detail={
-                'appointment_time': '该日期诊所停止营业'
-            })
-        if d.capacity <= d.count():
-            raise ValidationError(detail={'detail': '该日期已无剩余容量'})
         if serializer.validated_data['appointment_time'] < timezone.now().date():
             raise ValidationError(detail={'detail': '你要穿越回去？'})
         CreateModelMixin.perform_create(self, serializer)
