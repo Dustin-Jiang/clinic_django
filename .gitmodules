@@ -1,3 +1,6 @@
 [submodule "clinic_admin"]
 	path = clinic_admin
 	url = ../clinic_admin.git
+[submodule "clinic_docs"]
+	path = clinic_docs
+	url = ../clinic_docs.git

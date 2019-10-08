@@ -79,7 +79,7 @@ ROOT_URLCONF = 'clinic_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'clinic_admin', 'dist')],
+        'DIRS': [os.path.join(BASE_DIR, 'clinic_admin', 'dist'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,7 +94,9 @@ TEMPLATES = [
 
 if DEBUG:
     TEMPLATES[0]["DIRS"] = [os.path.abspath(os.path.join(
-        BASE_DIR, os.path.pardir, 'clinic_admin', 'dist')), ] + TEMPLATES[0]["DIRS"]
+        BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + TEMPLATES[0]["DIRS"]
+    # TEMPLATES[0]["DIRS"] = [os.path.abspath(os.path.join(
+        # BASE_DIR, os.path.pardir, 'clinic_docs', 'docs', '.vuepress', 'dist'))] + TEMPLATES[0]["DIRS"]
 
 WSGI_APPLICATION = 'clinic_django.wsgi.application'
 
@@ -158,7 +160,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/assets/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -187,9 +189,12 @@ REST_FRAMEWORK = {
 }
 STATIC_ROOT = '/usr/share/nginx/html/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "clinic_admin", "dist")
+    os.path.join(BASE_DIR, "clinic_admin", "dist"),
+    os.path.join(BASE_DIR, "clinic_docs", "docs", ".vuepress", "dist"),
 ]
 if DEBUG:
-    STATICFILES_DIRS = [os.path.abspath(os.path.join(
-        BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + STATICFILES_DIRS
+    STATICFILES_DIRS = [os.path.abspath(
+        os.path.join(BASE_DIR, os.path.pardir, 'clinic_docs', 'docs', '.vuepress', 'dist')),
+        os.path.abspath(
+        os.path.join(BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + STATICFILES_DIRS
 apikey = os.environ.get('apikey') or "oh-my-tlb"

@@ -108,7 +108,7 @@ class Announcement(models.Model):
     """accouncement related things."""
 
     class Meta:
-        ordering = ['piority', '-createdTime']
+        ordering = ['priority', '-createdTime']
 
     TAG_CHOICE = (
         ('AN', '普通公告'),
@@ -125,7 +125,7 @@ class Announcement(models.Model):
     expireDate = models.DateField(
         '失效时间'
     )
-    piority = models.PositiveIntegerField(
+    priority = models.PositiveIntegerField(
         '显示优先级', default=1
     )
 
