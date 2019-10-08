@@ -19,8 +19,7 @@ from rest_framework.response import Response
 from .authentication import ApikeyAuthentication
 from .decorators import login_require, with_apikey, worker_require
 from .models import FINISHED_STATUS, WORKING_STATUS, ClinicUser, Date, Record, Campus
-from .permissions import (ApikeyPermission, ClinicUserPermission,
-                          RecordPermission)
+from .permissions import ApikeyPermission, ClinicUserPermission
 from .serializers import (ClinicUserSerializer, DateSerializer,
                           RecordSerializer, RecordSerializerWechat, CampusSerializer)
 from django.utils import timezone
@@ -117,7 +116,7 @@ class ClinicUserViewSet(viewsets.ModelViewSet):
 
 
 class RecordViewSet(viewsets.ModelViewSet):
-    permission_classes = (RecordPermission,)
+    permission_classes = (IsAdminUser,)
     serializer_class = RecordSerializer
 
     @action(detail=True, permission_classes=[IsAdminUser])
@@ -138,17 +137,35 @@ class RecordViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(campus__name=campus)
         return queryset
 
-    def create(self, request):
-        if not request.user.is_staff:
-            if not request.data['status'] in (1, 4):
-                return Response({'detail': "not allowed"}, status=status.HTTP_400_BAD_REQUEST)
-            if request.data['status'] == 1:
-                if Record.objects.filter(user=request.user, status=1):
-                    return Response({'detail': "not allowed"}, status=status.HTTP_400_BAD_REQUEST)
-            elif request.data['status'] == 4:
-                if Record.objects.filter(user=request.user, status=4):
-                    return Response({'detail': "too many request"}, status=status.HTTP_400_BAD_REQUEST)
-        return super().create(request)
+    @action(detail=False, methods=["POST"])
+    def insert(self, request):
+        context = {'request': request}
+        username = request.data['user']
+        try:
+            user = ClinicUser.objects.get(username=username)
+        except:
+            user = ClinicUser(username=username)
+            user.save()
+        finally:
+            user_url = ClinicUserSerializer(instance=user, context=context).data['url']
+            data = request.data
+            data['user'] = user_url
+            data['status'] = 2
+            data['appointment_time'] = timezone.now().date().isoformat()
+            serializer = RecordSerializer(data=data)
+            if serializer.is_valid():
+                record = Record(**serializer.validated_data)
+                try:
+                    Date.objects.get(
+                        campus__name = serializer.validated_data['campus'],
+                        date = timezone.now().date()
+                    )
+                except ObjectDoesNotExist:
+                    raise ValidationError(detail='msg': '今日诊所停业')
+                record.save()
+                return Response(RecordSerializer(instance=record, context=context).data)
+            else:
+                raise ValidationError(detail={'msg': serializer.errors})
 
 
 class DateViewSet(viewsets.ModelViewSet):
