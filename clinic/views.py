@@ -161,7 +161,7 @@ class RecordViewSet(viewsets.ModelViewSet):
                         date = timezone.now().date()
                     )
                 except ObjectDoesNotExist:
-                    raise ValidationError(detail='msg': '今日诊所停业')
+                    raise ValidationError(detail={'msg': '今日诊所停业'})
                 record.save()
                 return Response(RecordSerializer(instance=record, context=context).data)
             else:
