@@ -69,17 +69,8 @@ class Record(models.Model):
     is_taken = models.BooleanField('是否取走', default=False)
 
     def __str__(self):
-        if self.arrive_time:
-            time = self.arrive_time.strftime("%Y/%m/%d")
-        else:
-            time = "还未到诊所"
-
-        if self.is_appointment:
-            return "预约-{name}-{status}-{arrive_time}".format(
-                name=self.user.realname, status=self.status_list[self.status], arrive_time=time)
-        else:
-            return "{name}-{status}-{arrive_time}".format(
-                name=self.user.realname, status=self.status_list[self.status], arrive_time=time)
+            return "{name}-{status}".format(
+                name=self.user.realname, status=self.status_list[self.status])
 
 
 class Date(models.Model):
