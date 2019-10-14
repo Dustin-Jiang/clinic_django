@@ -12,7 +12,8 @@ CAMPUS = (
 class ClinicUser(AbstractUser):
     """clinic user."""
     realname = models.CharField('真实姓名', max_length=50, blank=True, null=True)
-    phone_num = models.CharField('电话号码', max_length=20, blank=True, null=True) # TODO: 其实感觉用处不大
+    phone_num = models.CharField(
+        '电话号码', max_length=20, blank=True, null=True)  # TODO: 其实感觉用处不大
     campus = models.ForeignKey(
         'Campus', on_delete=models.SET_NULL, null=True, blank=True)
     school = models.CharField('学院', max_length=20, blank=True, null=True)
@@ -117,7 +118,7 @@ class Announcement(models.Model):
 
     title = models.CharField('标题', max_length=20)
     content = models.TextField("内容")
-    brief = models.TextField("内容概括", blank=True, default='')
+    brief = models.CharField("内容概括", max_length=64, blank=True, default='')
     tag = models.CharField("类型", max_length=16, choices=TAG_CHOICE)
     createdTime = models.DateTimeField(
         "创建时间", auto_now=False, auto_now_add=True)
