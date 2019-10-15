@@ -61,4 +61,4 @@ class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
 class CampusSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Campus
-        fields = ('name',)
+        fields = ('name', 'address')
