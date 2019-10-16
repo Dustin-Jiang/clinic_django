@@ -61,6 +61,9 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
         if serializer.validated_data['appointment_time'] < timezone.now().date():
             raise ValidationError(detail={'detail': '你要穿越回去？'})
+        # 这里没有限制：不能提交今天已经结束的服务时间的工单，不过鉴于每天会关闭所有未处理的工单
+        # ，这个约束不是很要紧
+        
         CreateModelMixin.perform_create(self, serializer)
 
     def perform_destroy(self, instance: Record):
@@ -147,7 +150,8 @@ class RecordViewSet(viewsets.ModelViewSet):
             user = ClinicUser(username=username)
             user.save()
         finally:
-            user_url = ClinicUserSerializer(instance=user, context=context).data['url']
+            user_url = ClinicUserSerializer(
+                instance=user, context=context).data['url']
             data = request.data
             data['user'] = user_url
             data['status'] = 2
@@ -157,8 +161,8 @@ class RecordViewSet(viewsets.ModelViewSet):
                 record = Record(**serializer.validated_data)
                 try:
                     Date.objects.get(
-                        campus__name = serializer.validated_data['campus'],
-                        date = timezone.now().date()
+                        campus__name=serializer.validated_data['campus'],
+                        date=timezone.now().date()
                     )
                 except ObjectDoesNotExist:
                     raise ValidationError(detail={'msg': '今日诊所停业'})
@@ -173,6 +177,15 @@ class DateViewSet(viewsets.ModelViewSet):
     serializer_class = DateSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+        if self.request.user.is_authenticated:
+            # 后台用户因为已经登录，所以会进入该语句
+            return queryset
+        # 对于微信端用户，即使是当天的，一旦结束服务了也无法看见
+        return queryset.filter(endTime__gte=timezone.now())
 
     def perform_create(self, serializer: DateSerializer):
         start = serializer.validated_data['date']
@@ -214,6 +227,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             return JsonResponse({'content': query.content})
         else:
             return JsonResponse({'content': "暂无公告"})
+
 
 class CampusViewSet(viewsets.ModelViewSet):
     queryset = Campus.objects.all()
