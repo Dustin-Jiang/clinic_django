@@ -14,6 +14,7 @@ services:
       apikey: oh-my-tlb # you must change that before deploy
       VIRTUAL_HOST: clinic.bitnp.net
       VIRTUAL_PORT: 80
+      TZ: Asia/Shanghai
     network_mode: bridge
     links:
       - "db:db"
