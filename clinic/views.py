@@ -63,13 +63,14 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
             raise ValidationError(detail={'detail': '你要穿越回去？'})
         # 这里没有限制：不能提交今天已经结束的服务时间的工单，不过鉴于每天会关闭所有未处理的工单
         # ，这个约束不是很要紧
-        
+
         CreateModelMixin.perform_create(self, serializer)
 
     def perform_destroy(self, instance: Record):
         try:
             d = Date.objects.get(
-                date=instance.appointment_time
+                date=instance.appointment_time,
+                campus=instance.campus
             )
         except ObjectDoesNotExist:
             raise ValidationError(detail={
