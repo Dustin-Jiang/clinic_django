@@ -69,14 +69,18 @@ class Record(models.Model):
     is_taken = models.BooleanField('是否取走', default=False)
 
     def __str__(self):
-            return "{name}-{status}".format(
-                name=self.user.realname, status=self.status_list[self.status])
+        return "{name}-{status}".format(
+            name=self.user.realname, status=self.status_list[self.status])
 
 
 class Date(models.Model):
     """business hour."""
     class Meta:
         ordering = ["date"]
+        # 限制每个校区（服务地点）每天只能提供一个服务时间
+        # 如果想取消这种限制，需要工单的 `appointment_time` 使用外键指向具体的 `Date`
+        # 否则会引发错误
+        unique_together = ['campus', 'date']
     title = models.CharField('名称', default="正常服务", max_length=20)
     date = models.DateField(verbose_name="开始日期")
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
