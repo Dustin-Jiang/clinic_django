@@ -188,6 +188,23 @@ class DateViewSet(viewsets.ModelViewSet):
         # 对于微信端用户，即使是当天的，一旦结束服务了也无法看见
         return queryset.filter(endTime__gte=timezone.now())
 
+    @action(detail=True, permission_classes=[IsAdminUser])
+    def cancel_all(self, request, pk=None):
+        "将该服务时间所有未完成工单转为`未到诊所`状态"
+        _date = self.get_object()
+        # 得到所有当天该地区的 queryset
+        _queryset = Record.objects.filter(
+            appointment_time=_date.date, campus=_date.campus)
+        # 过滤，得到其中的未完成的工单
+        _queryset = _queryset.filter(status__in=WORKING_STATUS)
+        count = _queryset.count()
+        # 转换为 `未到诊所` 状态
+        _queryset.update(status=9)
+        # serializer = RecordSerializer(_queryset, many=True, context={
+        #     'request': self.request})
+
+        return Response({'count': count})
+
     def perform_create(self, serializer: DateSerializer):
         start = serializer.validated_data['date']
         if start < date.today():

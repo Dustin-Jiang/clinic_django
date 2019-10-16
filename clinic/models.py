@@ -2,13 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
 
-# Create your models here.
-CAMPUS = (
-    ('ZGC', "中关村"),
-    ('LX', '良乡'),
-)
-
-
 class ClinicUser(AbstractUser):
     """clinic user."""
     realname = models.CharField('真实姓名', max_length=50, blank=True, null=True)
