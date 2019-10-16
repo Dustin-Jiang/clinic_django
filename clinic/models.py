@@ -35,7 +35,7 @@ class ClinicUser(AbstractUser):
 
 
 WORKING_STATUS = [0, 1, 2, 4, 5]
-FINISHED_STATUS = [3, 6, 7, 8]
+FINISHED_STATUS = [3, 6, 7, 8, 9]
 
 
 class Record(models.Model):
@@ -43,7 +43,7 @@ class Record(models.Model):
     class Meta:
         ordering = ['-id']
     status_list = ['上单未解决', '预约待确认', '预约已确认', '预约已驳回',
-                   '登记待受理', '正在处理', '已解决问题', '建议返厂', '扔给明天']
+                   '登记待受理', '正在处理', '已解决问题', '建议返厂', '扔给明天', '未到诊所']
     STATUS = [(status, commnet) for status, commnet in enumerate(status_list)]
     user = models.ForeignKey(
         ClinicUser, on_delete=models.CASCADE, related_name='record', verbose_name="顾客", blank=True, null=True)
