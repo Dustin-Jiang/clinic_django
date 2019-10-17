@@ -100,7 +100,7 @@ class Announcement(models.Model):
 
     TAG_CHOICE = (
         ('AN', '普通公告'),
-        ('TOC', '免责声明'),
+        ('TOS', '免责声明'),
         ('TA', '置顶公告')
     )
 

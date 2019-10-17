@@ -241,8 +241,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def toc(self, request, pk=None):
-        """返回TOC"""
-        query = Announcement.objects.filter(tag='TOC').first()
+        """返回TOS"""
+        query = Announcement.objects.filter(tag='TOS').first()
         # 优先级排在最前的一条
         print(query)
         if query:
