@@ -46,10 +46,10 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
             )
         except ObjectDoesNotExist:
             raise ValidationError(detail={
-                'appointment_time': '该日期诊所停止营业'
+                'msg': '该日期诊所停止营业'
             })
         if d.capacity <= d.count():
-            raise ValidationError(detail={'detail': '该日期已无剩余容量'})
+            raise ValidationError(detail={'msg': '该日期已无剩余容量'})
         # 已有1个working中的工单，则不接新的
 
         working_record_count: int = Record.objects.filter(
@@ -57,10 +57,10 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
         print("[working_record_count]", working_record_count)
         if working_record_count >= 1:
-            raise ValidationError("已超出可申请工单数量")
+            raise ValidationError(detail={'msg': '你要穿越回去？'})
 
         if serializer.validated_data['appointment_time'] < timezone.now().date():
-            raise ValidationError(detail={'detail': '你要穿越回去？'})
+            raise ValidationError(detail={'msg': '你要穿越回去？'})
         # 这里没有限制：不能提交今天已经结束的服务时间的工单，不过鉴于每天会关闭所有未处理的工单
         # ，这个约束不是很要紧
 
@@ -77,7 +77,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
             )
         except ObjectDoesNotExist:
             raise ValidationError(detail={
-                'appointment_time': '该日期诊所停止营业'
+                'msg': '该日期诊所停止营业'
             })
         DestroyModelMixin.perform_destroy(self, instance)
 
@@ -223,7 +223,7 @@ class DateViewSet(viewsets.ModelViewSet):
             raise ValidationError("已经有工单存在，无法修改")
 
         if start < date.today():
-            raise ValidationError(detail={'start': 'earlier than today'})
+            raise ValidationError(detail={'start': '不能早于今天'})
         UpdateModelMixin.perform_update(self, serializer)
 
     def perform_destroy(self, instance: Date):
