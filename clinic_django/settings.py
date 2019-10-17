@@ -44,7 +44,7 @@ if DEBUG:
         'user-agent',
         'x-csrftoken',
         'x-requested-with',
-        'apikey',
+        'x-api-key',
     ]
 # Application definition
 

@@ -43,8 +43,8 @@ def cas_only(func):
 def with_apikey(func):
     @wraps(func)
     def wrapper(request: HttpRequest, *args, **kwargs):
-        if not request.headers.get('apikey') == apikey:
-            return HttpResponseForbidden("bad apikey")
+        if not request.headers.get('X-API-KEY') == apikey:
+            return HttpResponseForbidden("bad X-API-KEY")
         else:
             return func(request, *args, **kwargs)
     return wrapper

@@ -6,7 +6,7 @@ from rest_framework import exceptions
 
 class ApikeyAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        if not request.headers.get('apikey') == apikey:
+        if not request.headers.get('X-API-KEY') == apikey:
             return None
         username = request.query_params.get('username')
         if not username:
