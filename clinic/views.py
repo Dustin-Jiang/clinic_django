@@ -64,7 +64,10 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         # 这里没有限制：不能提交今天已经结束的服务时间的工单，不过鉴于每天会关闭所有未处理的工单
         # ，这个约束不是很要紧
 
-        CreateModelMixin.perform_create(self, serializer)
+        try:
+            CreateModelMixin.perform_create(self, serializer)
+        except Exception as e:
+            print(e)
 
     def perform_destroy(self, instance: Record):
         try:
