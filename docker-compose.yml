@@ -12,3 +12,6 @@ services:
     restart: always
     ports:
       - 80:80
+  mq:
+    image: rabbitmq
+    restart: always

@@ -4,3 +4,6 @@ django-cors-headers
 djangorestframework
 uwsgi
 psycopg2
+celery
+django-celery-beat
+django-celery-results

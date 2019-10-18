@@ -1,10 +1,3 @@
-'''
-@Date: 2019-08-12 18:22:23
-@LastEditTime: 2019-08-12 18:28:29
-@Description: file content
-@Author: Tang Yuming
-@LastEditors: Feng Kaiyu
-'''
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpRequest
 from django.urls import reverse
 from functools import wraps

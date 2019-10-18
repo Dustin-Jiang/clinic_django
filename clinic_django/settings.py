@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'django_celery_beat',
+    'django_celery_results',
     'django_cas_ng',
     'clinic.apps.ClinicConfig',
     'rest_framework',
@@ -79,7 +81,7 @@ ROOT_URLCONF = 'clinic_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'clinic_admin', 'dist'),],
+        'DIRS': [os.path.join(BASE_DIR, 'clinic_admin', 'dist'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,7 +98,7 @@ if DEBUG:
     TEMPLATES[0]["DIRS"] = [os.path.abspath(os.path.join(
         BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + TEMPLATES[0]["DIRS"]
     # TEMPLATES[0]["DIRS"] = [os.path.abspath(os.path.join(
-        # BASE_DIR, os.path.pardir, 'clinic_docs', 'docs', '.vuepress', 'dist'))] + TEMPLATES[0]["DIRS"]
+    # BASE_DIR, os.path.pardir, 'clinic_docs', 'docs', '.vuepress', 'dist'))] + TEMPLATES[0]["DIRS"]
 
 WSGI_APPLICATION = 'clinic_django.wsgi.application'
 
@@ -154,7 +156,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -198,3 +200,16 @@ if DEBUG:
         os.path.abspath(
         os.path.join(BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + STATICFILES_DIRS
 apikey = os.environ.get('apikey') or "oh-my-tlb"
+
+
+if DEBUG:
+    CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+else:
+    CELERY_BROKER_URL = 'amqp://guest:guest@mq//'
+
+# celery beat配置
+# CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = TIME_ZONE
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_RESULT_BACKEND = 'django-db'
