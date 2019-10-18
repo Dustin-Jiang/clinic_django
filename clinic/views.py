@@ -22,8 +22,6 @@ from .models import FINISHED_STATUS, WORKING_STATUS, ClinicUser, Date, Record, C
 from .permissions import ApikeyPermission, ClinicUserPermission
 from .serializers import (ClinicUserSerializer, DateSerializer,
                           RecordSerializer, RecordSerializerWechat, CampusSerializer)
-from django.utils import timezone
-
 # Create your views here.
 
 
@@ -34,7 +32,8 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def get_queryset(self):
         username = self.request.query_params['username']
-        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS, appointment_time__lt=timezone.now())
+        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS,
+                                                                      appointment_time__lt=datetime.now())
 
     def perform_create(self, serializer: RecordSerializer):
 
@@ -53,13 +52,13 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
         # 已有1个working中的工单，则不接新的
 
         working_record_count: int = Record.objects.filter(
-            status__in=WORKING_STATUS, user=self.request.user, appointment_time__gte=timezone.now()).count()
+            status__in=WORKING_STATUS, user=self.request.user, appointment_time__gte=datetime.now()).count()
 
         print("[working_record_count]", working_record_count)
         if working_record_count >= 1:
             raise ValidationError(detail={'msg': '你要穿越回去？'})
 
-        if serializer.validated_data['appointment_time'] < timezone.now().date():
+        if serializer.validated_data['appointment_time'] < datetime.now().date():
             raise ValidationError(detail={'msg': '你要穿越回去？'})
         # 这里没有限制：不能提交今天已经结束的服务时间的工单，不过鉴于每天会关闭所有未处理的工单
         # ，这个约束不是很要紧
@@ -159,14 +158,14 @@ class RecordViewSet(viewsets.ModelViewSet):
             data = request.data
             data['user'] = user_url
             data['status'] = 2
-            data['appointment_time'] = timezone.now().date().isoformat()
+            data['appointment_time'] = datetime.now().date().isoformat()
             serializer = RecordSerializer(data=data)
             if serializer.is_valid():
                 record = Record(**serializer.validated_data)
                 try:
                     Date.objects.get(
                         campus__name=serializer.validated_data['campus'],
-                        date=timezone.now().date()
+                        date=datetime.now().date()
                     )
                 except ObjectDoesNotExist:
                     raise ValidationError(detail={'msg': '今日诊所停业'})
@@ -189,7 +188,7 @@ class DateViewSet(viewsets.ModelViewSet):
             # 后台用户因为已经登录，所以会进入该语句
             return queryset
         # 对于微信端用户，即使是当天的，一旦结束服务了也无法看见
-        return queryset.filter(endTime__gte=timezone.now())
+        return queryset.filter(endTime__gte=datetime.now().time())
 
     @action(detail=True, permission_classes=[IsAdminUser])
     def cancel_all(self, request, pk=None):
