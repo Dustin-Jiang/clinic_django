@@ -59,7 +59,7 @@ class Record(models.Model):
     reject_reason = models.CharField(
         '拒绝理由', max_length=600, blank=True, null=True)
     password = models.CharField('密码', max_length=256, blank=True, null=True)
-    is_taken = models.BooleanField('是否取走', default=False)
+    is_taken = models.BooleanField('是否取走', default=True)
 
     def __str__(self):
         return "{name}-{status}".format(
