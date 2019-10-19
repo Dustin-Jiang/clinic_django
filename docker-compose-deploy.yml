@@ -8,7 +8,7 @@ services:
       POSTGRES_DB: clinic
     network_mode: bridge
   web:
-    image: docker.bitnp.net/bitnp/clinic/clinic_django:local-build
+    image: docker.bitnp.net/bitnp/clinic/clinic_django:master
     restart: always
     environment:
       apikey: ${APIKEY} # you must change that before deploy
