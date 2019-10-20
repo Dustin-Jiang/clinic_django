@@ -6,7 +6,7 @@ from .utils import verify_apikey
 class ApikeyPermission(permissions.BasePermission):
     # whether has X-API-KEY or is_staff are ok to go
     def has_permission(self, request, view):
-        if verify_apikey(request.headers.get('X-API-KEY'), request.query_params.get('username')):
+        if verify_apikey(request.headers.get('X-API-KEY'), request.query_params.get('username'), request.headers.get('Date')):
             return True
 
         if request.user.is_staff:
@@ -14,7 +14,7 @@ class ApikeyPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # if request.headers.get('X-API-KEY') == apikey:
-        if verify_apikey(request.headers.get('X-API-KEY'), request.query_params.get('username')):
+        if verify_apikey(request.headers.get('X-API-KEY'), request.query_params.get('username'), request.headers.get('Date')):
             return True
         if request.user.is_staff:
             return True

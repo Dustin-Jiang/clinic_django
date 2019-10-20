@@ -4,7 +4,7 @@ from datetime import datetime
 from .models import WORKING_STATUS
 import logging
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 
 @shared_task
