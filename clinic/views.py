@@ -183,7 +183,7 @@ class DateViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(date__gte=date.today())
         if self.request.user.is_authenticated:
             # 后台用户因为已经登录，所以会进入该语句
             return queryset
@@ -238,6 +238,9 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
 
+    def get_queryset(self):
+        return super().get_queryset().filter(expireDate__gte=date.today())
+    
     @action(detail=False, methods=["GET"])
     def toc(self, request, pk=None):
         """返回TOS"""
