@@ -90,6 +90,10 @@ class Date(models.Model):
 
     def finish(self):
         return Record.objects.filter(appointment_time=self.date, status__in=FINISHED_STATUS, campus=self.campus).count()
+    
+    def working(self):
+        """正在服务"""
+        return Record.objects.filter(appointment_time=self.date, campus=self.campus, status=5).count()
 
 
 class Announcement(models.Model):

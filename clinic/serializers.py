@@ -42,13 +42,14 @@ class RecordSerializerWechat(serializers.HyperlinkedModelSerializer):
 class DateSerializer(serializers.HyperlinkedModelSerializer):
     count = serializers.ReadOnlyField()
     finish = serializers.ReadOnlyField()
+    working = serializers.ReadOnlyField()
     campus = serializers.SlugRelatedField(
         slug_field="name", queryset=Campus.objects.all())
 
     class Meta:
         model = Date
         fields = '__all__'
-        read_only_fields = ('count', 'finish')
+        read_only_fields = ('count', 'finish', 'working')
 
 
 class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
