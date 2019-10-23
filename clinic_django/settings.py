@@ -178,7 +178,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -231,7 +231,9 @@ else:
 
 # celery beat配置
 # CELERY_ENABLE_UTC = False
+
+# CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = TIME_ZONE
-DJANGO_CELERY_BEAT_TZ_AWARE = False
+# DJANGO_CELERY_BEAT_TZ_AWARE = False
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_RESULT_BACKEND = 'django-db'
