@@ -188,7 +188,7 @@ class DateViewSet(viewsets.ModelViewSet):
             # 后台用户因为已经登录，所以会进入该语句
             return queryset
         # 对于微信端用户，即使是当天的，一旦结束服务了也无法看见
-        return queryset.filter(endTime__gte=datetime.now().time())
+        return queryset.filter(date=date.today(), endTime__gte=datetime.now().time()) | queryset.filter(date__gt=date.today())
 
     @action(detail=True, permission_classes=[IsAdminUser])
     def cancel_all(self, request, pk=None):
@@ -240,7 +240,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return super().get_queryset().filter(expireDate__gte=date.today())
-    
+
     @action(detail=False, methods=["GET"])
     def toc(self, request, pk=None):
         """返回TOS"""
