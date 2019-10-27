@@ -73,7 +73,8 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
             _subject = f"{serializer.validated_data['campus']} {serializer.validated_data['appointment_time']} 有新的预约"
             _content = f"""
-            请前往 https://clinic.bitnp.net/manage 进行确认
+            请前往 https://clinic.bitnp.net/manage 进行确认\n\n
+            {serializer.validated_data['username']}:\n{serializer.validated_data['description']}
             """
             # weekday = datetime.now().weekday()
             # mail_list_queryset = ClinicUser.objects.filter(
