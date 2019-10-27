@@ -16,6 +16,7 @@ stages:
 
 before_script:
   - git submodule sync --recursive
+  - git submodule foreach --recursive git reset --hard
   - git submodule update --init --recursive
   - docker info
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
