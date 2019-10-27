@@ -221,8 +221,14 @@ if DEBUG:
         os.path.join(BASE_DIR, os.path.pardir, 'clinic_docs', 'docs', '.vuepress', 'dist')),
         os.path.abspath(
         os.path.join(BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + STATICFILES_DIRS
+
 apikey = os.environ.get('apikey') or "oh-my-tlb"
 
+EMAIL_HOST = os.environ.get('EMAIL_HOST') or 'mail.bit.edu.cn'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') or ''
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
+# EMAIL_PORT = 465
+# EMAIL_USE_SSL = True
 
 if DEBUG:
     CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
