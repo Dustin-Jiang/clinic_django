@@ -83,7 +83,7 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
             # mail list
             # mail_list = mail_list_queryset.values('email')
             send_mail(_subject, _content, 'fengkaiyu@bit.edu.cn',
-                      'clinic@bitnp.net')
+                      ['clinic@bitnp.net'])
 
         except Exception as e:
             print(e)
