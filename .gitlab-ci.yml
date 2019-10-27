@@ -1,6 +1,7 @@
 image: docker:git
 
 variables:
+  GIT_SUBMODULE_STRATEGY: recursive
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   RELEASE_TAG: $CI_REGISTRY_IMAGE:latest
 
@@ -15,9 +16,8 @@ stages:
   - release
 
 before_script:
-  - git submodule sync --recursive
-  - git submodule foreach --recursive git reset --hard
-  - git submodule update --init --recursive
+#  - git submodule sync --recursive
+#  - git submodule update --init --recursive
   - docker info
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   - apk add yarn
