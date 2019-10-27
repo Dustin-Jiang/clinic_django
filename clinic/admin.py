@@ -10,6 +10,8 @@ class RecordAdmin(admin.ModelAdmin):
 @admin.register(ClinicUser)
 class ClinicUserAdmin(admin.ModelAdmin):
     list_display = ('username', 'realname', 'is_staff', 'campus', 'school')
+    search_fields = ('username',)
+    list_filter = ('is_staff',)
     fieldsets = (
         ('基本信息', {
             'fields': ('username', 'realname', 'campus', 'school', 'phone_num')
