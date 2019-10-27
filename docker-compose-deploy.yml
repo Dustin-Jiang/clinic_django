@@ -12,6 +12,9 @@ services:
     restart: always
     environment:
       apikey: ${APIKEY} # you must change that before deploy
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
       VIRTUAL_HOST: clinic.bitnp.net
       VIRTUAL_PORT: 80
       TZ: Asia/Shanghai
