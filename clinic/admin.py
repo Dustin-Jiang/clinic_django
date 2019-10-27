@@ -31,3 +31,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('title', 'tag', 'content')
 
 admin.site.register(Campus)
+
+admin.site.site_header = "网协电脑诊所管理"
+admin.site.site_title = "网协电脑诊所超管"
+admin.site.index_title = "预约系统管理"

@@ -97,7 +97,7 @@ class Date(models.Model):
 
 
 class Announcement(models.Model):
-    """accouncement related things."""
+    """announcement related things."""
 
     class Meta:
         ordering = ['priority', '-createdTime']
@@ -133,6 +133,10 @@ class Announcement(models.Model):
 
 class Campus(models.Model):
     """campuses of bit"""
+
+    class Meta:
+        verbose_name = "校区"
+        verbose_name_plural = "校区"
 
     name = models.CharField('校区名称', unique=True, max_length=20)
     address = models.CharField('诊所地址', max_length=128)
