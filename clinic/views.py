@@ -36,8 +36,28 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
     def get_queryset(self):
         username = self.request.query_params['username']
-        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS,
-                                                                      appointment_time__lt=datetime.now())
+        # 现在 list 只会得到已有的工单
+        return Record.objects.filter(user__username=username).filter(status__in=FINISHED_STATUS)
+
+    @action(detail=False, methods=["GET"])
+    def working(self, request):
+        username = self.request.query_params['username']
+        try:
+            _record = Record.objects.get(
+                user__username=username, status__in=WORKING_STATUS)
+            context = {
+                "request": request
+            }
+            serializer = RecordSerializerWechat(_record, context=context)
+            ret = {
+                'count': 1,
+                'data': serializer.data
+            }
+        except ObjectDoesNotExist:
+            ret = {
+                'count': 0,
+            }
+        return Response(ret)
 
     def perform_create(self, serializer: RecordSerializer):
 
