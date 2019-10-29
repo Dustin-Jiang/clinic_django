@@ -37,7 +37,34 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
     def get_queryset(self):
         username = self.request.query_params['username']
         # 现在 list 只会得到已有的工单
-        return Record.objects.filter(user__username=username).filter(status__in=FINISHED_STATUS)
+        return Record.objects.filter(user__username=username).exclude(status__in=WORKING_STATUS,
+                                                                      appointment_time__lt=datetime.now())
+
+    @action(detail=False, methods=["GET"])
+    def finish(self, request):
+        queryset = self.filter_queryset(
+            self.get_queryset()).filter(status__in=FINISHED_STATUS)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+        
+
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(
+    #         self.get_queryset()).filter(status__in=FINISHED_STATUS)
+
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
     def working(self, request):
