@@ -35,6 +35,8 @@ class Record(models.Model):
     """record."""
     class Meta:
         ordering = ['-id']
+        verbose_name = "工单"
+        verbose_name_plural = "工单"
     status_list = ['上单未解决', '预约待确认', '预约已确认', '预约已驳回',
                    '登记待受理', '正在处理', '已解决问题', '建议返厂', '扔给明天', '未到诊所']
     STATUS = [(status, commnet) for status, commnet in enumerate(status_list)]
@@ -66,6 +68,7 @@ class Record(models.Model):
             name=self.user.realname, status=self.status_list[self.status])
 
 
+
 class Date(models.Model):
     """business hour."""
     class Meta:
@@ -74,6 +77,9 @@ class Date(models.Model):
         # 如果想取消这种限制，需要工单的 `appointment_time` 使用外键指向具体的 `Date`
         # 否则会引发错误
         unique_together = ['campus', 'date']
+        verbose_name = "服务时间"
+        verbose_name_plural = "服务时间"
+
     title = models.CharField('名称', default="正常服务", max_length=20)
     date = models.DateField(verbose_name="开始日期")
     capacity = models.PositiveIntegerField(verbose_name="可服务人数")
@@ -101,6 +107,8 @@ class Announcement(models.Model):
 
     class Meta:
         ordering = ['priority', '-createdTime']
+        verbose_name = "公告"
+        verbose_name_plural = "公告"
 
     TAG_CHOICE = (
         ('AN', '普通公告'),
@@ -129,6 +137,7 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+    
 
 
 class Campus(models.Model):

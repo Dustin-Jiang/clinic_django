@@ -5,7 +5,8 @@ from .models import ClinicUser, Record, Date, Announcement, Campus
 # Register your models here.
 @admin.register(Record)
 class RecordAdmin(admin.ModelAdmin):
-    list_display = ('user', 'realname', 'worker', 'status')
+    list_display = ('user', 'realname', 'campus', 'worker', 'status')
+    list_filter = ('status', 'campus',  'worker')
 
 @admin.register(ClinicUser)
 class ClinicUserAdmin(admin.ModelAdmin):
