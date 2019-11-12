@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
 
+
 class ClinicUser(AbstractUser):
     """clinic user."""
     realname = models.CharField('真实姓名', max_length=50, blank=True, null=True)
@@ -29,6 +30,7 @@ class ClinicUser(AbstractUser):
 
 WORKING_STATUS = [0, 1, 2, 4, 5]
 FINISHED_STATUS = [3, 6, 7, 8, 9]
+VALID_FINISHED_STATUS = [6, 7, 8]
 
 
 class Record(models.Model):
@@ -68,7 +70,6 @@ class Record(models.Model):
             name=self.user.realname, status=self.status_list[self.status])
 
 
-
 class Date(models.Model):
     """business hour."""
     class Meta:
@@ -95,8 +96,8 @@ class Date(models.Model):
         return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
 
     def finish(self):
-        return Record.objects.filter(appointment_time=self.date, status__in=FINISHED_STATUS, campus=self.campus).count()
-    
+        return Record.objects.filter(appointment_time=self.date, status__in=VALID_FINISHED_STATUS, campus=self.campus).count()
+
     def working(self):
         """正在服务"""
         return Record.objects.filter(appointment_time=self.date, campus=self.campus, status=5).count()
@@ -137,7 +138,6 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
-    
 
 
 class Campus(models.Model):
