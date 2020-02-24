@@ -191,7 +191,7 @@ AUTHENTICATION_BACKENDS = (
     'django_cas_ng.backends.CASBackend',
 )
 
-CAS_SERVER_URL = "https://login.bitnp.net/cas/"
+CAS_SERVER_URL = "https://login.bitnp.net/auth/realms/master/protocol/cas/"
 if DEBUG:
     CAS_SERVER_URL = 'https://login.bit.edu.cn/devcas/'
 
