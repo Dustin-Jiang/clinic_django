@@ -20,6 +20,7 @@ before_script:
 #  - git submodule update --init --recursive
   - docker info
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
   - apk add yarn
   - cd clinic_admin && yarn && yarn run build && cd ..
   - cd clinic_docs && yarn && yarn docs:build && cd ..
