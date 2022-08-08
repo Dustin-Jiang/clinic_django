@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.9-slim-bullseye
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
@@ -9,13 +9,15 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.li
     sed -i 's|security.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' /etc/apt/sources.list && \
     sed -i 's|security.debian.org|mirrors.tuna.tsinghua.edu.cn/debian-security|g' /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y nginx supervisor && \
+    apt-get install -y libpq5 libpq-dev gcc nginx supervisor && \
     rm -rf /var/lib/apt/lists/* && \
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY requirements.txt /usr/src/app/
 
 RUN pip install -r requirements.txt --no-cache-dir
+
+RUN apt-get remove -y libpq-dev gcc && apt-get autoremove -y 
 
 COPY . /usr/src/app/
 

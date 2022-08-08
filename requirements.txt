@@ -3,7 +3,7 @@ django_cas_ng
 django-cors-headers
 djangorestframework
 uwsgi
-psycopg2
+psycopg2==2.8.6
 celery
 django-celery-beat
 django-celery-results

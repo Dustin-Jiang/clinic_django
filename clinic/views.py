@@ -22,7 +22,6 @@ from .models import FINISHED_STATUS, WORKING_STATUS, ClinicUser, Date, Record, C
 from .permissions import ApikeyPermission, ClinicUserPermission
 from .serializers import (ClinicUserSerializer, DateSerializer,
                           RecordSerializer, RecordSerializerWechat, CampusSerializer)
-from django.core.mail import send_mail
 # Create your views here.
 
 weekday_list = ['work_mon', 'work_tue', 'work_wedn', 'work_thu',
@@ -116,23 +115,6 @@ class RecordViewSetWechat(viewsets.ModelViewSet):
 
         try:
             CreateModelMixin.perform_create(self, serializer)
-            # now we can send a mail here.
-
-            _subject = f"{serializer.validated_data['campus']} {serializer.validated_data['appointment_time']} 有新的预约"
-            _content = f"""
-            请前往 https://clinic.bitnp.net/manage 进行确认\n\n
-            {serializer.validated_data['username']}:\n{serializer.validated_data['description']}
-            """
-            # weekday = datetime.now().weekday()
-            # mail_list_queryset = ClinicUser.objects.filter(
-            #     is_staff=True) | ClinicUser.objects.filter(is_superuser=True)
-            # _keywords = {weekday_list[weekday]: True}
-            # mail_list_queryset = mail_list_queryset.filter(**_keywords)
-            # mail list
-            # mail_list = mail_list_queryset.values('email')
-            send_mail(_subject, _content, 'fengkaiyu@bit.edu.cn',
-                      ['clinic@bitnp.net'])
-
         except Exception as e:
             print(e)
 
