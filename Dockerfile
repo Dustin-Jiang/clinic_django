@@ -22,6 +22,7 @@ RUN apt-get remove -y libpq-dev gcc && apt-get autoremove -y
 COPY . /usr/src/app/
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
+    sed -i 's/worker_processes auto/worker_processes 10/g' /etc/nginx/nginx.conf && \
     python manage.py collectstatic --noinput
 
 COPY deploy/nginx-app.conf /etc/nginx/sites-available/default

@@ -140,10 +140,10 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('POSTGRES_DATABASE_NAME') or os.environ.get('DJANGO_DATABASE_NAME') or 'clinic',
-            'USER': 'postgres',
-            'PASSWORD': os.environ.get('POSTGRES_ENV_POSTGRES_ROOT_PASSWORD') or os.environ.get('DJANGO_DATABASE_PASSWORD') or 'example',
-            'HOST': os.environ.get('POSTGRES_PORT_3306_TCP_ADDR') or os.environ.get('DJANGO_DATABASE_HOST') or 'db',
-            'PORT': '5432',
+            'USER': os.environ.get('POSTGRES_USER_NAME') or 'clinic',
+            'PASSWORD': os.environ.get('POSTGRES_USER_PASSWORD') or os.environ.get('DJANGO_DATABASE_PASSWORD') or 'example',
+            'HOST': os.environ.get('POSTGRES_HOST') or os.environ.get('DJANGO_DATABASE_HOST') or 'db',
+            'PORT': os.environ.get('POSTGRES_PORT') or '5432',
         }
     }
 
