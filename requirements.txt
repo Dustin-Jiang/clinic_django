@@ -8,3 +8,5 @@ celery
 gevent
 django-celery-beat
 django-celery-results
+django-postgrespool2
+

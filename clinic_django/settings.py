@@ -138,7 +138,7 @@ if DEBUG:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
+            'ENGINE': 'django_postgrespool2',
             'NAME': os.environ.get('POSTGRES_DATABASE_NAME') or os.environ.get('DJANGO_DATABASE_NAME') or 'clinic',
             'USER': os.environ.get('POSTGRES_USER_NAME') or 'clinic',
             'PASSWORD': os.environ.get('POSTGRES_USER_PASSWORD') or os.environ.get('DJANGO_DATABASE_PASSWORD') or 'example',
