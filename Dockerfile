@@ -21,6 +21,8 @@ RUN apt-get remove -y libpq-dev gcc && apt-get autoremove -y && apt-get clean -y
 
 COPY . /usr/src/app/
 
+RUN rm -rf /usr/src/app/clinic_admin/node_modules /usr/src/app/clinic_docs/node_modules
+
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     sed -i 's/worker_processes auto/worker_processes 10/g' /etc/nginx/nginx.conf && \
     python manage.py collectstatic --noinput
