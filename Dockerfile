@@ -5,19 +5,19 @@ WORKDIR /usr/src/app
 ENV DJANGO_PRODUCTION=1
 
 # Use sed because of potential file owner issue
-RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
-    sed -i 's|security.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' /etc/apt/sources.list && \
-    sed -i 's|security.debian.org|mirrors.tuna.tsinghua.edu.cn/debian-security|g' /etc/apt/sources.list && \
+RUN sed -i 's/deb.debian.org/mirrors-tuna.bitnp.net/g' /etc/apt/sources.list && \
+    sed -i 's|security.debian.org/debian-security|mirrors-tuna.bitnp.net/debian-security|g' /etc/apt/sources.list && \
+    sed -i 's|security.debian.org|mirrors-tuna.bitnp.net/debian-security|g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y libpq5 libpq-dev gcc nginx supervisor && \
     rm -rf /var/lib/apt/lists/* && \
-    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+    pip config set global.index-url http://pypi-tuna.bitnp.net/simple
 
 COPY requirements.txt /usr/src/app/
 
 RUN pip install -r requirements.txt --no-cache-dir
 
-RUN apt-get remove -y libpq-dev gcc && apt-get autoremove -y 
+RUN apt-get remove -y libpq-dev gcc && apt-get autoremove -y && apt-get clean -y
 
 COPY . /usr/src/app/
 
