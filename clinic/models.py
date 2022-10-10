@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
+from django.db.models import Q
 
 
 class ClinicUser(AbstractUser):
@@ -93,7 +94,7 @@ class Date(models.Model):
         return '{}-{}-{}人'.format(self.date, self.campus, self.capacity)
 
     def count(self):
-        return Record.objects.filter(appointment_time=self.date, campus=self.campus).count()
+        return Record.objects.filter(appointment_time=self.date, campus=self.campus).filter(~Q(status=3)).count()
 
     def finish(self):
         return Record.objects.filter(appointment_time=self.date, status__in=VALID_FINISHED_STATUS, campus=self.campus).count()
