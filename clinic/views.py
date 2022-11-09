@@ -5,7 +5,7 @@ from datetime import date, datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect, JsonResponse)
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import status, viewsets
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.decorators import action
@@ -136,6 +136,9 @@ def manage(request):
     if request.method == 'GET':
         return render(request, 'manage/index.html')
 
+def redirect2manage(request):
+    if request.method == 'GET':
+        return redirect('manage/')
 
 class ClinicUserViewSet(viewsets.ModelViewSet):
     permission_classes = (ClinicUserPermission, )
