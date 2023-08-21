@@ -9,7 +9,7 @@ RUN sed -i 's/deb.debian.org/mirrors-tuna.bitnp.net/g' /etc/apt/sources.list && 
     sed -i 's|security.debian.org/debian-security|mirrors-tuna.bitnp.net/debian-security|g' /etc/apt/sources.list && \
     sed -i 's|security.debian.org|mirrors-tuna.bitnp.net/debian-security|g' /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y libpq5 libpq-dev gcc nginx supervisor && \
+    apt-get install -y nginx && \
     rm -rf /var/lib/apt/lists/* && \
     pip config set global.index-url http://pypi-tuna.bitnp.net/simple && \
     pip config set install.trusted-host pypi-tuna.bitnp.net
@@ -17,8 +17,6 @@ RUN sed -i 's/deb.debian.org/mirrors-tuna.bitnp.net/g' /etc/apt/sources.list && 
 COPY requirements.txt /usr/src/app/
 
 RUN pip install -r requirements.txt --no-cache-dir
-
-RUN apt-get remove -y libpq-dev gcc && apt-get autoremove -y && apt-get clean -y
 
 COPY . /usr/src/app/
 

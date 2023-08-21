@@ -2,10 +2,11 @@ django~=2.2.28
 django_cas_ng
 django-cors-headers
 djangorestframework
-uwsgi
-psycopg2==2.8.6
+gunicorn
+psycopg2-binary==2.8.6
 celery
-gevent
+eventlet
+supervisor
 django-celery-beat
 django-celery-results
 django-postgrespool2
