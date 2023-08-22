@@ -24,14 +24,13 @@ RUN rm /etc/apt/sources.list.d/debian.sources && \
     rm -rf /var/lib/apt/lists/* && \
     sed -i 's/worker_processes auto/worker_processes 2/g' /etc/nginx/nginx.conf && \
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
-    pip install -r requirements.txt --no-cache-dir
-
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
-    sed -i 's/worker_processes auto/worker_processes 4/g' /etc/nginx/nginx.conf && \
-    python manage.py collectstatic --noinput
+    pip install -r requirements.txt --no-cache-dir && \
+    echo "daemon off;" >> /etc/nginx/nginx.conf && \
+    python manage.py collectstatic --noinput && \
+    echo_supervisord_conf > /etc/supervisord.conf && \
+    cat deploy/supervisor-app.conf >> /etc/supervisord.conf
 
 COPY deploy/nginx-app.conf /etc/nginx/sites-available/default
-COPY deploy/supervisor-app.conf /etc/supervisor/conf.d/
 
 EXPOSE 80
 ENTRYPOINT [ "/bin/bash", "deploy/entrypoint.sh" ]
