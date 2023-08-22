@@ -33,4 +33,4 @@ COPY deploy/nginx-app.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 ENTRYPOINT [ "/bin/bash", "deploy/entrypoint.sh" ]
-CMD ["supervisord", "-n"]
+CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
