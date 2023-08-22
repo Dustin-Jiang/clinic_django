@@ -103,7 +103,7 @@ ROOT_URLCONF = 'clinic_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'clinic_admin', 'dist'), ],
+        'DIRS': [os.path.join(BASE_DIR, 'clinic_admin_dist'), ], # in container
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
