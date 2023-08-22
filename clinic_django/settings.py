@@ -138,7 +138,7 @@ if DEBUG:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django_postgrespool2',
+            'ENGINE': 'dj_db_conn_pool.backends.postgresql',
             'NAME': os.environ.get('POSTGRES_DATABASE_NAME') or os.environ.get('DJANGO_DATABASE_NAME') or 'clinic',
             'USER': os.environ.get('POSTGRES_USER_NAME') or 'clinic',
             'PASSWORD': os.environ.get('POSTGRES_USER_PASSWORD') or os.environ.get('DJANGO_DATABASE_PASSWORD') or 'example',
@@ -213,12 +213,10 @@ REST_FRAMEWORK = {
 }
 STATIC_ROOT = '/usr/share/nginx/html/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "clinic_admin", "dist"),
-    os.path.join(BASE_DIR, "clinic_docs", "docs", ".vuepress", "dist"),
+    os.path.join(BASE_DIR, "clinic_admin_dist"),
 ]
 if DEBUG:
-    STATICFILES_DIRS = [os.path.abspath(
-        os.path.join(BASE_DIR, os.path.pardir, 'clinic_docs', 'docs', '.vuepress', 'dist')),
+    STATICFILES_DIRS = [
         os.path.abspath(
         os.path.join(BASE_DIR, os.path.pardir, 'clinic_admin', 'dist'))] + STATICFILES_DIRS
 

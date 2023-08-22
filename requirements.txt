@@ -9,5 +9,4 @@ eventlet
 supervisor
 django-celery-beat
 django-celery-results
-django-postgrespool2
-
+django-db-connection-pool
