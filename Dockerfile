@@ -1,20 +1,19 @@
 FROM node:18-slim AS build
-RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN pnpm config set registry https://registry.npmmirror.com/
+RUN npm config set registry https://registry.npmmirror.com/
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN mkdir -p /usr/src/app/clinic_admin/node_modules && \
     rm -rf /usr/src/app/clinic_admin/node_modules && \
-    pnpm --dir /usr/src/app/clinic_admin/ install
-
-RUN pnpm --dir /usr/src/app/clinic_admin/ run build && \
+    cd /usr/src/app/clinic_admin/ && npm install
+ENV NODE_OPTIONS=--openssl-legacy-provider
+RUN cd /usr/src/app/clinic_admin/ && npm run build && \
     mv /usr/src/app/clinic_admin/dist /usr/src/app/clinic_admin_dist && \
     rm -rf /usr/src/app/clinic_admin
 
 
 FROM python:3-slim
 ENV DJANGO_PRODUCTION=1
-COPY --from build /usr/src/app /usr/src/app
+COPY --from=build /usr/src/app /usr/src/app
 WORKDIR /usr/src/app
 
 COPY deploy/sources.list /etc/apt/sources.list
