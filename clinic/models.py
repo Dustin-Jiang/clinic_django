@@ -6,6 +6,8 @@ from django.db.models import Q
 
 class ClinicUser(AbstractUser):
     """clinic user."""
+    class Meta:
+        ordering = ["id"]
     realname = models.CharField('真实姓名', max_length=50, blank=True, null=True)
     phone_num = models.CharField(
         '电话号码', max_length=20, blank=True, null=True)  # TODO: 其实感觉用处不大
