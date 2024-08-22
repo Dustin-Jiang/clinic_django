@@ -1,14 +1,11 @@
 FROM node:18-slim AS build
-RUN npm config set registry https://registry.npmmirror.com/
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-RUN mkdir -p /usr/src/app/clinic_admin/node_modules && \
-    rm -rf /usr/src/app/clinic_admin/node_modules && \
-    cd /usr/src/app/clinic_admin/ && npm install
-ENV NODE_OPTIONS=--openssl-legacy-provider
-RUN cd /usr/src/app/clinic_admin/ && npm run build && \
-    mv /usr/src/app/clinic_admin/dist /usr/src/app/clinic_admin_dist && \
-    rm -rf /usr/src/app/clinic_admin
+ENV COREPACK_NPM_REGISTRY=https://registry.npmmirror.com
+RUN corepack enable pnpm && pnpm config set registry https://registry.npmmirror.com/ && \
+    cd /usr/src/app/clinic_admin_ng/ && pnpm install && pnpm build && \
+    mv /usr/src/app/clinic_admin_ng/dist /usr/src/app/clinic_admin_dist && \
+    rm -rf /usr/src/app/clinic_admin_ng
 
 
 FROM python:3-slim
