@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from .views import (AnnouncementViewSet, ClinicUserViewSet, DateViewSet,
-                    RecordViewSet, RecordViewSetWechat, manage, redirect2manage, CampusViewSet)
+                    RecordViewSet, RecordViewSetWechat, manage, auth, redirect2manage, CampusViewSet)
 from .views4serializer import ClinicUserView
 
 router = routers.DefaultRouter()
@@ -18,4 +18,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/user/', ClinicUserView.as_view()),
     path('api/', include(router.urls)),
+    path('auth/', auth, name="auth_route"),
 ]

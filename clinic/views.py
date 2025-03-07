@@ -136,6 +136,10 @@ def manage(request):
     if request.method == 'GET':
         return render(request, 'manage/index.html')
 
+@worker_require
+def auth(request):
+    return status(200)
+
 def redirect2manage(request):
     if request.method == 'GET':
         return redirect('manage/')
