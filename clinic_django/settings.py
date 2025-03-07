@@ -208,6 +208,8 @@ CAS_EXTRA_LOGIN_PARAMS = {
 }
 CAS_ROOT_PROXIED_AS = CAS_SERVICE
 
+CSRF_TRUSTED_ORIGINS = [os.environ.get('DOMAIN') or "clinic.bitnp.net"]
+
 AUTH_USER_MODEL = 'clinic.ClinicUser'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
