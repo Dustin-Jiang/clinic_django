@@ -138,7 +138,7 @@ def manage(request):
 
 @worker_require
 def auth(request):
-    return status(200)
+    return HttpResponse("Ready to go! lol", status=status.HTTP_200_OK)
 
 def redirect2manage(request):
     if request.method == 'GET':
