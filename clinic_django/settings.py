@@ -196,15 +196,17 @@ AUTHENTICATION_BACKENDS = (
 )
 
 CAS_SERVER_URL = "https://login.bitnp.net/auth/realms/master/protocol/cas/"
-if DEBUG:
-    CAS_SERVER_URL = 'https://login.bit.edu.cn/devcas/'
+# if DEBUG:
+#     CAS_SERVER_URL = 'https://login.bit.edu.cn/devcas/'
 
 CAS_LOGIN_MSG = None
 CAS_LOGGED_MSG = None
 CAS_REDIRECT_URL = '/manage/'
+CAS_SERVICE = os.environ.get('CAS_SERVICE') or "https://clinic.bitnp.net/login?next=%2Fmanage%2F"
 CAS_EXTRA_LOGIN_PARAMS = {
-    "service": os.environ.get('CAS_SERVICE') or "https://clinic.bitnp.net/login?next=%2Fmanage%2F"
+    "service": CAS_SERVICE
 }
+CAS_ROOT_PROXIED_AS = CAS_SERVICE
 
 AUTH_USER_MODEL = 'clinic.ClinicUser'
 REST_FRAMEWORK = {
