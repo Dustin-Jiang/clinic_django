@@ -1,4 +1,4 @@
-FROM node:18-slim AS build
+FROM node:22-alpine AS build
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 ENV COREPACK_NPM_REGISTRY=https://registry.npmmirror.com
@@ -19,7 +19,6 @@ RUN rm /etc/apt/sources.list.d/debian.sources && \
     apt-get install -y nginx tini && \
     rm -rf /var/lib/apt/lists/* && \
     sed -i 's/worker_processes auto/worker_processes 4/g' /etc/nginx/nginx.conf && \
-    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
     pip install -r requirements.txt --no-cache-dir && \
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
     python manage.py collectstatic --noinput && \
