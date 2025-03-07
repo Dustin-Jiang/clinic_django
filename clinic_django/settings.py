@@ -202,6 +202,9 @@ if DEBUG:
 CAS_LOGIN_MSG = None
 CAS_LOGGED_MSG = None
 CAS_REDIRECT_URL = '/manage/'
+CAS_EXTRA_LOGIN_PARAMS = {
+    "service": os.environ.get('CAS_SERVICE') or "https://clinic.bitnp.net/login?next=%2Fmanage%2F"
+}
 
 AUTH_USER_MODEL = 'clinic.ClinicUser'
 REST_FRAMEWORK = {
