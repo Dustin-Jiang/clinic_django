@@ -8,7 +8,7 @@ RUN corepack enable pnpm && pnpm config set registry https://registry.npmmirror.
     rm -rf /usr/src/app/clinic_admin_ng
 
 
-FROM python:3-slim
+FROM python:3.11.4-slim
 ENV DJANGO_PRODUCTION=1
 COPY --from=build /usr/src/app /usr/src/app
 WORKDIR /usr/src/app
